@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="Engine" target="1.7" />
+      <module name="OffTheLineLogic" target="1.7" />
+      <module name="PCEngine" target="1.7" />
+      <module name="PCGame" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

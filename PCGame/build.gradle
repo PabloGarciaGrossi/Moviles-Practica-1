@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':PCEngine')
+    implementation project(path: ':Engine')
+    implementation project(path: ':OffTheLineLogic')
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
