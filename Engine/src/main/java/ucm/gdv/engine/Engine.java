@@ -8,4 +8,10 @@ public interface Engine {
     Input getInput();
 
     InputStream openInputStream(String filename);
+
+    void init();
+
+    void render();
+
+    void update();
 }

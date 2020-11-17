@@ -3,9 +3,11 @@ package ucm.gdv.engine.pc;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import javax.swing.JFrame;
 
 
 public class EnginePC implements ucm.gdv.engine.Engine {
+
     public GraphicsPC getGraphics(){
         return g;
     }
@@ -26,6 +28,20 @@ public class EnginePC implements ucm.gdv.engine.Engine {
         return is;
     }
 
+    public void init()
+    {
+        g = new GraphicsPC(800,800);
+
+        input = new InputPC();
+    }
+
+    public void render(){
+        g.render();
+    }
+
+    public  void update(){
+
+    }
     private  GraphicsPC g;
     private InputPC input;
 }

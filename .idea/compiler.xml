@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
+      <module name="AndroidGame.AndroidEngine" target="1.8" />
+      <module name="AndroidGame.Androidgame" target="1.8" />
       <module name="Engine" target="1.7" />
       <module name="OffTheLineLogic" target="1.7" />
       <module name="PCEngine" target="1.7" />
