@@ -40,8 +40,10 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             do {
                 _graphics = _strategy.getDrawGraphics();
                 try {
-                    setColor("Yellow");
+                    setColor("black");
                     fillRect(0, 0, getWidth(), getHeight());
+                    setColor("yellow");
+                    drawLine(-getWidth()/3, 0, getWidth()/3, 0);
 
                     //Dibujar cosas
                 }
@@ -87,19 +89,31 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void setColor(String colorName){
-        Color color;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(colorName);
-            color = (Color)field.get(null);
-            _colorbg = color;
-        } catch (Exception e) {
-            color = null; // Not defined
-            _colorbg = Color.BLACK;
+        colorName = colorName.toLowerCase();
+
+        switch(colorName){
+            case "red":
+                _colorbg = Color.red;
+                break;
+            case "yellow":
+                _colorbg = Color.yellow;
+                break;
+            case "blue":
+                _colorbg = Color.blue;
+                break;
+            default:
+                _colorbg = Color.black;
+                break;
         }
         _graphics.setColor(_colorbg);
     }
 
     public void drawLine(int x1, int y1, int x2, int y2){
+
+        x1 += getWidth()/2;
+        x2 += getWidth()/2;
+        y1 += getHeight()/2;
+        y2 += getHeight()/2;
         _graphics.drawLine(x1, y1, x2, y2);
     }
 
