@@ -2,6 +2,8 @@ package ucm.gdv.engine.pc;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
@@ -43,8 +45,9 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
                     setColor("black");
                     fillRect(0, 0, getWidth(), getHeight());
                     setColor("yellow");
-                    drawLine(-getWidth()/3, 0, getWidth()/3, 0);
-
+                    drawLine(-getWidth()/3, getHeight()/2, getWidth()/3, getHeight()/2);
+                    _graphics.setFont(newFont("Bangers-Regular.ttf", 24, true));
+                    drawText("hola mundo", -24, getHeight()/2);
                     //Dibujar cosas
                 }
                 finally {
@@ -60,7 +63,19 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public Font newFont(String filename, int size, Boolean isBold){
-        return _font;
+        Font baseFont =  null;
+        String file = "Assets/Fonts/" + filename;
+        try (InputStream is = new FileInputStream(file)) {
+            baseFont = Font.createFont(Font.TRUETYPE_FONT, is);
+        }
+        catch (Exception e) {
+            // Ouch. No está.
+            System.err.println("Error cargando la fuente: " + e);
+        }
+        if(isBold)
+            return baseFont.deriveFont(Font.BOLD, size);
+        else
+            return baseFont.deriveFont(Font.PLAIN, size);
     }
 
     public void clear (String color){
@@ -112,8 +127,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
         x1 += getWidth()/2;
         x2 += getWidth()/2;
-        y1 += getHeight()/2;
-        y2 += getHeight()/2;
+        y1 = getHeight() - y1;
+        y2 = getHeight() - y2;
         _graphics.drawLine(x1, y1, x2, y2);
     }
 
@@ -122,6 +137,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void drawText(String text, int x, int y){
+        x += getWidth()/2;
+        y = getHeight() - y;
         _graphics.drawString(text, x, y);
     }
 
@@ -137,5 +154,4 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     private Color _colorbg;
     private java.awt.Graphics _graphics;
     private java.awt.image.BufferStrategy _strategy;
-    private Font _font;
 }

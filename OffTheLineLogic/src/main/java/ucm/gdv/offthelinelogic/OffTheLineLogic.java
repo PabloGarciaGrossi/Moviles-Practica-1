@@ -7,5 +7,16 @@ public class OffTheLineLogic {
         _engine = e;
     }
 
+    public void update(){
+
+    }
+
+    public void render(){
+
+    }
+
+    public void loadLevel(){
+
+    }
     private Engine _engine;
 }
