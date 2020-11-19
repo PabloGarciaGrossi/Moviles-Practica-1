@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
 
+import ucm.gdv.engine.Logic;
+
 
 public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
@@ -17,7 +19,6 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         _window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _window.setIgnoreRepaint(true);
         _window.setVisible(true);
-
 
         // Intentamos crear el buffer strategy con 2 buffers.
         int intentos = 100;
@@ -37,17 +38,21 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         _strategy = _window.getBufferStrategy();
     }
 
-    public void render(){
+    public void render(Logic logic){
         do {
             do {
                 _graphics = _strategy.getDrawGraphics();
                 try {
-                    setColor("black");
-                    fillRect(0, 0, getWidth(), getHeight());
+                    clear("black");
+                    logic.render();
+                    setColor("yellow");
+                    /*
                     setColor("yellow");
                     drawLine(-getWidth()/3, getHeight()/2, getWidth()/3, getHeight()/2);
                     _graphics.setFont(newFont("Bangers-Regular.ttf", 24, true));
                     drawText("hola mundo", -24, getHeight()/2);
+                    */
+
                     //Dibujar cosas
                 }
                 finally {
@@ -56,6 +61,13 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             } while(_strategy.contentsRestored());
             _strategy.show();
         } while(_strategy.contentsLost());
+    }
+
+    public void setGraphics(java.awt.Graphics graph){
+        _graphics=graph;
+    }
+    public java.awt.image.BufferStrategy getBufferStrategy(){
+        return _strategy;
     }
 
     public void onDraw(float x1, float y1, float x2, float y2){
@@ -124,22 +136,19 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void drawLine(int x1, int y1, int x2, int y2){
-
-        x1 += getWidth()/2;
-        x2 += getWidth()/2;
-        y1 = getHeight() - y1;
-        y2 = getHeight() - y2;
-        _graphics.drawLine(x1, y1, x2, y2);
+        Coord coord1=conversionCoord(x1, y1);
+        Coord coord2=conversionCoord(x2, y2);
+        _graphics.drawLine(coord1.X, coord1.Y, coord2.X, coord2.Y);
     }
 
-    public void fillRect(int x1, int y1, int x2, int y2){
-        _graphics.fillRect(x1,y1,x2,y2);
+    public void fillRect(int x, int y, int w, int h){
+        Coord coord=conversionCoord(x, y);
+        _graphics.fillRect(coord.X, coord.Y, w, h);
     }
 
     public void drawText(String text, int x, int y){
-        x += getWidth()/2;
-        y = getHeight() - y;
-        _graphics.drawString(text, x, y);
+        Coord coord=conversionCoord(x, y);
+        _graphics.drawString(text, coord.X, coord.Y);
     }
 
     public int getWidth(){
@@ -150,6 +159,18 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         return _window.getHeight();
     }
 
+    private Coord conversionCoord(int x, int y){
+        Coord coord = new Coord(x+9, y+38);
+        return coord;
+    };
+
+    private class Coord{
+        public Coord(int x, int y){
+            X=x;
+            Y=y;
+        }
+        public int X, Y;
+    }
     JFrame _window;
     private Color _colorbg;
     private java.awt.Graphics _graphics;

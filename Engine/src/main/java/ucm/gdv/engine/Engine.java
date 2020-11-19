@@ -11,7 +11,8 @@ public interface Engine {
 
     void init();
 
-    void render();
+    void run();
 
-    void update();
+    void setLogic(Logic lo);
+
 }

@@ -13,10 +13,10 @@ public class GameObject {
     public void render(Engine e){
 
     };
-    public void update (){};
+    public void update (double deltaTime){};
 
-    int _x;
-    int _y;
+    double _x;
+    double _y;
     int _size;
     String _color;
 }

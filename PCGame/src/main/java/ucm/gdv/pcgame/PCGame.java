@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import ucm.gdv.engine.pc.EnginePC;
 import ucm.gdv.offthelinelogic.OffTheLineLogic;
 
-public class PCGame extends JFrame {
+public class PCGame {
     static EnginePC _engine;
     static OffTheLineLogic _logic;
     static boolean _run = true;
@@ -14,17 +14,15 @@ public class PCGame extends JFrame {
     static void init(){
         _engine = new EnginePC();
         _engine.init();
-    }
-    static void render(){
-        _engine.render();
+        _logic = new OffTheLineLogic(_engine);
+
     }
 
     public static void  main(String[] args){
         init();
-        while(_run)
-        {
-            render();
-        }
+
+        _engine.setLogic(_logic);
+        _engine.run();
     }
 
 }

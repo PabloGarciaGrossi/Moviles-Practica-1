@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 import javax.swing.JFrame;
 
+import ucm.gdv.engine.Logic;
+
 
 public class EnginePC implements ucm.gdv.engine.Engine {
 
@@ -31,17 +33,29 @@ public class EnginePC implements ucm.gdv.engine.Engine {
     public void init()
     {
         g = new GraphicsPC(800,800);
-
         input = new InputPC();
     }
 
-    public void render(){
-        g.render();
+    public void run(){
+        long lastFrameTime = System.nanoTime();
+        while(true) {
+            if(logic!=null) {
+                long currentTime = System.nanoTime();
+                long nanoElapsedTime = currentTime - lastFrameTime;
+                lastFrameTime = currentTime;
+                double deltaTime = (double) nanoElapsedTime / 1.0E9;
+                g.render(logic);
+                logic.update(deltaTime);
+                logic.handleInput();
+            }
+        }
     }
 
-    public  void update(){
-
+    public void setLogic(Logic lo){
+        logic=lo;
     }
     private  GraphicsPC g;
     private InputPC input;
+
+    Logic logic=null;
 }
