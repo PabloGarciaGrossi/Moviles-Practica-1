@@ -44,16 +44,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
                 _graphics = _strategy.getDrawGraphics();
                 try {
                     clear("black");
-                    logic.render();
-                    setColor("yellow");
-                    /*
-                    setColor("yellow");
-                    drawLine(-getWidth()/3, getHeight()/2, getWidth()/3, getHeight()/2);
-                    _graphics.setFont(newFont("Bangers-Regular.ttf", 24, true));
-                    drawText("hola mundo", -24, getHeight()/2);
-                    */
-
                     //Dibujar cosas
+                    logic.render();
                 }
                 finally {
                     _graphics.dispose();
@@ -92,7 +84,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     public void clear (String color){
         setColor(color);
-        fillRect(0, 0, getWidth(), getHeight());
+        fillRect(-getWidth()/2, -getHeight()/2, getWidth(), getHeight());
     }
 
     public void translate(int x, int y){
@@ -128,6 +120,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             case "blue":
                 _colorbg = Color.blue;
                 break;
+            case "white":
+                _colorbg = Color.white;
             default:
                 _colorbg = Color.black;
                 break;
@@ -160,7 +154,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     private Coord conversionCoord(int x, int y){
-        Coord coord = new Coord(x+9, y+38);
+        Coord coord = new Coord(x+getWidth()/2, y+getHeight()/2);
         return coord;
     };
 
