@@ -48,48 +48,39 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void loadLevel(int level){
-        JsonArray o = (JsonArray) levels.get(level);
-        System.out.println(o);
-        JsonObject levelread = (JsonObject)o.get(0);
-        System.out.println(levelread);
+        JsonArray levelsArray = (JsonArray) levels.get(0);
+        System.out.println(levelsArray);
 
-        //Loading paths
+        JsonObject levelread = (JsonObject)levelsArray.get(level);
+
+        //Loading paths #####################################################
         JsonArray paths = (JsonArray) levelread.get("paths");
         System.out.println(paths);
 
-        JsonObject vertex = (JsonObject) paths.get(0);
-        JsonArray _v = (JsonArray) vertex.get("vertices");
-        System.out.println(_v);
-        Path p = new Path(0,0,0, "yellow");
+        for (int j = 0; j < paths.size(); j++) {
+            JsonObject vertex = (JsonObject) paths.get(j);
+            JsonArray _v = (JsonArray) vertex.get("vertices");
+            System.out.println(_v);
+            Path p = new Path(0, 0, 0, "yellow");
 
-        for (int i = 0; i < _v.size(); i++)
-        {
-            JsonObject actualVertex = (JsonObject) _v.get(i);
+            for (int i = 0; i < _v.size(); i++) {
+                JsonObject actualVertex = (JsonObject) _v.get(i);
 
-            BigDecimal x = (BigDecimal) actualVertex.get("x");
-            BigDecimal y = (BigDecimal) actualVertex.get("y");
+                BigDecimal x = (BigDecimal) actualVertex.get("x");
+                BigDecimal y = (BigDecimal) actualVertex.get("y");
 
-            p.addVertex(x.intValue(), y.intValue());
-        }
-
-        gameObjects.add(p);
-        /*for (int i = 0; i < paths.size(); i++) {
-            JsonObject v = (JsonObject) paths.get(i);
-            for (int j = 0; j < v.size(); j++) {
-                JsonObject vertex1 = (JsonObject) v.get(j);
-                JsonObject vertex2 = null;
-                if ((j + 1) != v.size())
-                    vertex2 = (JsonObject) v.get(j + 1);
-                else
-                    vertex2 = (JsonObject) v.get(0);
-                BigDecimal x1 = (BigDecimal) vertex1.get("x");
-                BigDecimal y1 = (BigDecimal) vertex1.get("y");
-                BigDecimal x2 = (BigDecimal) vertex2.get("x");
-                BigDecimal y2 = (BigDecimal) vertex2.get("y");
-                p.addLine(x1.intValue(), y1.intValue(), x2.intValue(), y2.intValue());
+                p.addVertex(x.intValue(), y.intValue());
             }
+
+            //Comprobamos que vengan indicadas las direcciones
+            if ((JsonArray) vertex.get("directions") != null) {
+
+            }
+            gameObjects.add(p);
         }
-        gameObjects.add(p);*/
+        // ################################################################
+
+
     }
     private Engine _engine;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
