@@ -59,7 +59,7 @@ public class OffTheLineLogic implements Logic{
         for (int j = 0; j < paths.size(); j++) {
             JsonObject vertex = (JsonObject) paths.get(j);
             JsonArray _v = (JsonArray) vertex.get("vertices");
-            Path p = new Path(0, 0, 0, "blue");
+            Path p = new Path(0.0f, 0.0f,  "blue");
 
             for (int i = 0; i < _v.size(); i++) {
                 JsonObject actualVertex = (JsonObject) _v.get(i);
@@ -67,7 +67,7 @@ public class OffTheLineLogic implements Logic{
                 BigDecimal x = (BigDecimal) actualVertex.get("x");
                 BigDecimal y = (BigDecimal) actualVertex.get("y");
 
-                p.addVertex(x.intValue(), y.intValue());
+                p.addVertex(x.floatValue(), y.floatValue());
             }
 
             //Comprobamos que vengan indicadas las direcciones
@@ -89,7 +89,7 @@ public class OffTheLineLogic implements Logic{
             BigDecimal x = (BigDecimal) actualItem.get("x");
             BigDecimal y = (BigDecimal) actualItem.get("y");
 
-            Coin nCoin = new Coin(x.intValue(), y.intValue(), 10, "yellow", 0.0f, 0.0f, 0.0f);
+            Coin nCoin = new Coin(x.floatValue(), y.floatValue(), "yellow", 10f, 0.0f, 0.0f);
             gameObjects.add(nCoin);
         }
 

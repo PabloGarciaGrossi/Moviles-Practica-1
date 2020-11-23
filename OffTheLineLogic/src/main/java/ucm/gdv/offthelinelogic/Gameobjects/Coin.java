@@ -3,8 +3,8 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import ucm.gdv.engine.Engine;
 
 public class Coin extends GameObject{
-    public Coin(int x, int y, int size, String color, float speed, float radius, float angle){
-        super(x,y,size,color);
+    public Coin(float x, float y, String color,float radius, float speed, float angle){
+        super(x,y,color);
         _speed=speed;
         _radius = radius;
         _angle = angle;
@@ -14,10 +14,10 @@ public class Coin extends GameObject{
     public void render(Engine e) {
         super.render(e);
         e.getGraphics().setColor(_color);
-        e.getGraphics().drawLine((int)_x - _size/2, (int)_y -_size/2, (int)_x + _size/2, (int)_y - _size/2);
-        e.getGraphics().drawLine((int)_x + _size/2, (int)_y -_size/2, (int)_x + _size/2, (int)_y + _size/2);
-        e.getGraphics().drawLine((int)_x + _size/2, (int)_y +_size/2, (int)_x - _size/2, (int)_y + _size/2);
-        e.getGraphics().drawLine((int)_x - _size/2, (int)_y +_size/2, (int)_x - _size/2, (int)_y - _size/2);
+        e.getGraphics().drawLine(_x - _radius/2, _y -_radius/2, _x + _radius/2, _y - _radius/2);
+        e.getGraphics().drawLine(_x + _radius/2, _y -_radius/2, _x + _radius/2, _y + _radius/2);
+        e.getGraphics().drawLine(_x + _radius/2, _y +_radius/2, _x - _radius/2, _y + _radius/2);
+        e.getGraphics().drawLine(_x - _radius/2, _y +_radius/2, _x - _radius/2, _y - _radius/2);
     }
 
 

@@ -129,9 +129,9 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         _graphics.setColor(_colorbg);
     }
 
-    public void drawLine(int x1, int y1, int x2, int y2){
-        Coord coord1=conversionCoord(x1, y1);
-        Coord coord2=conversionCoord(x2, y2);
+    public void drawLine(float x1, float y1, float x2, float y2){
+        Coord coord1=conversionCoord((int) x1, (int) y1);
+        Coord coord2=conversionCoord((int) x2, (int) y2);
         _graphics.drawLine(coord1.X, coord1.Y, coord2.X, coord2.Y);
     }
 

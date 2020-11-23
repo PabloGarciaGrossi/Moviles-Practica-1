@@ -6,9 +6,9 @@ import java.util.List;
 import ucm.gdv.engine.Engine;
 
 public class Path extends GameObject{
-    public Path(int x, int y,  int size, String color)
+    public Path(float x, float y, String color)
     {
-        super(x,y,size,color);
+        super(x,y,color);
     }
 
     public void render (Engine e){
@@ -23,14 +23,14 @@ public class Path extends GameObject{
 
     }
 
-    public void addVertex(int x, int y){
+    public void addVertex(float x, float y){
         _vertex.add(new Vertex(x, y));
     }
 
     class Vertex{
-        public Vertex(int x_, int y_){ x = x_; y = y_;}
-        int x;
-        int y;
+        public Vertex(float x_, float y_){ x = x_; y = y_;}
+        float x;
+        float y;
     }
 
 

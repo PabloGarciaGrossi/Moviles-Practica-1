@@ -3,11 +3,10 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import ucm.gdv.engine.Engine;
 
 public class GameObject {
-    public GameObject(int x, int y, int size, String color)
+    public GameObject(float x, float y, String color)
     {
         _x = x;
         _y = y;
-        _size = size;
         _color = color;
     }
     public void render(Engine e){
@@ -15,8 +14,7 @@ public class GameObject {
     };
     public void update (double deltaTime){};
 
-    double _x;
-    double _y;
-    int _size;
+    float _x;
+    float _y;
     String _color;
 }
