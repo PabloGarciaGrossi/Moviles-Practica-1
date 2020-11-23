@@ -26,7 +26,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(1);
+        loadLevel(2);
     }
 
     public void update(double deltaTime){
@@ -90,7 +90,21 @@ public class OffTheLineLogic implements Logic{
             BigDecimal x = (BigDecimal) actualItem.get("x");
             BigDecimal y = (BigDecimal) actualItem.get("y");
 
-            Coin nCoin = new Coin(x.floatValue(), y.floatValue(), "yellow", 20f, 0.0f, 0.0f, 0.0f);
+            Coin nCoin = new Coin(x.floatValue(), y.floatValue(), "yellow", 14f);
+
+            BigDecimal speedBD, angleBD, radiusBD = null;
+            if(actualItem.get("speed") != null) {
+                speedBD = (BigDecimal) actualItem.get("speed");
+                nCoin.set_speed(speedBD.floatValue());
+            }
+            if(actualItem.get("radius") != null) {
+                radiusBD = (BigDecimal) actualItem.get("radius");
+                nCoin.set_radius(radiusBD.floatValue());
+            }
+            if(actualItem.get("angle") != null) {
+                angleBD = (BigDecimal) actualItem.get("angle");
+                nCoin.set_angle(angleBD.floatValue());
+            }
             gameObjects.add(nCoin);
         }
 

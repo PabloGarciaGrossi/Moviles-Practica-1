@@ -3,11 +3,8 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import ucm.gdv.engine.Engine;
 
 public class Coin extends GameObject{
-    public Coin(float x, float y, String color,float size,float radius, float speed, float angle){
+    public Coin(float x, float y, String color,float size){
         super(x,y,size,color);
-        _speed=speed;
-        _radius = radius;
-        _angle = angle;
     }
 
     @Override
@@ -32,7 +29,7 @@ public class Coin extends GameObject{
         e.getGraphics().drawLine(x4, y4, x1, y1);*/
 
         e.getGraphics().save();
-        e.getGraphics().translate(_x, _y);
+        e.getGraphics().translate(c * ((_x - _radius) - _x) - s * ((_y - _radius) -_y) + _x, s * ((_x - _radius) - _x) + c * ((_y - _radius) - _y) + _y);
         e.getGraphics().rotate(_angle);
         e.getGraphics().drawLine(- _size/2, - _size/2,  _size/2, - _size/2);
         e.getGraphics().drawLine(_size/2, - _size/2,  _size/2,  _size/2);
@@ -47,9 +44,23 @@ public class Coin extends GameObject{
     public void update(double deltaTime) {
         super.update(deltaTime);
         //_x+=_speed*deltaTime;
-        _angle += 250 * deltaTime;
+        if(_speed != 0)
+            _angle += _speed * deltaTime;
+        else
+            _angle += 80 * deltaTime;
+
     }
 
+    public void set_angle(float angle){
+        _angle = angle;
+    }
+    public void set_speed(float speed){
+        _speed = speed;
+    }
+    public void set_radius(float radius)
+    {
+        _radius = radius;
+    }
     float _speed;
     float _radius;
     float _angle;
