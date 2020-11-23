@@ -8,9 +8,9 @@ public interface Graphics {
 
     public void clear (String color);
 
-    public void translate(int x, int y);
+    public void translate(float x, float y);
 
-    public void scale (int x, int y);
+    public void scale (float x);
 
     public void rotate(float angle);
 
@@ -24,9 +24,11 @@ public interface Graphics {
 
     public void fillRect(int x1, int y1, int x2, int y2);
 
-    public void drawText(String text, int x, int y);
+    public void drawText(String text, float x, float y);
 
-    public int getWidth();
+    public float getWidth();
 
-    public int getHeight();
+    public float getHeight();
+
+    public float calculateScale();
 }

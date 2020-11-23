@@ -6,9 +6,9 @@ import java.util.List;
 import ucm.gdv.engine.Engine;
 
 public class Path extends GameObject{
-    public Path(float x, float y, String color)
+    public Path(String color)
     {
-        super(x,y,color);
+        super(0,0,0,color);
     }
 
     public void render (Engine e){

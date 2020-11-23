@@ -2,6 +2,8 @@ package ucm.gdv.engine.pc;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -45,6 +47,10 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
                 try {
                     clear("black");
                     //Dibujar cosas
+                    save();
+                    translate(getWidth()/2, getHeight()/2);
+                    scale(calculateScale());
+                    rotate(180);
                     logic.render();
                 }
                 finally {
@@ -84,29 +90,43 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     public void clear (String color){
         setColor(color);
-        fillRect(-getWidth()/2, -getHeight()/2, getWidth(), getHeight());
+        fillRect(0, 0,(int) getWidth(),(int) getHeight());
     }
 
-    public void translate(int x, int y){
-
+    public void translate(float x, float y){
+        Graphics2D _g = (Graphics2D) _graphics;
+        _g.translate(x, y);
     }
 
-    public void scale (int x, int y){
-
+    public void scale (float x){
+        Graphics2D _g = (Graphics2D) _graphics;
+        _g.scale(-x, x);
     }
 
     public void rotate(float angle){
-
+        Graphics2D _g = (Graphics2D) _graphics;
+        _g.rotate(Math.toRadians(angle));
     }
 
     public void save(){
-
+        Graphics2D _g = (Graphics2D) _graphics;
+        old = _g.getTransform();
     }
 
     public void restore(){
-
+        Graphics2D _g = (Graphics2D) _graphics;
+        _g.setTransform(old);
     }
 
+    public float calculateScale(){
+        float s1 = 0;
+        float s2 = 0;
+        s1 = getWidth()/_logicW;
+        s2 = getHeight()/_logicH;
+        if (s1 < s2)
+            return s1;
+        else return s2;
+    }
     public void setColor(String colorName){
         colorName = colorName.toLowerCase();
 
@@ -130,34 +150,24 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void drawLine(float x1, float y1, float x2, float y2){
-        Coord coord1=conversionCoord((int) x1, (int) y1);
-        Coord coord2=conversionCoord((int) x2, (int) y2);
-        _graphics.drawLine(coord1.X, coord1.Y, coord2.X, coord2.Y);
+        _graphics.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
     }
 
     public void fillRect(int x, int y, int w, int h){
-        Coord coord=conversionCoord(x, y);
-        _graphics.fillRect(coord.X, coord.Y, w, h);
+        _graphics.fillRect(x, y, w, h);
     }
 
-    public void drawText(String text, int x, int y){
-        Coord coord=conversionCoord(x, y);
-        _graphics.drawString(text, coord.X, coord.Y);
+    public void drawText(String text, float x, float y){
+        _graphics.drawString(text, (int) x, (int) y);
     }
 
-    public int getWidth(){
+    public float getWidth(){
         return _window.getWidth();
     }
 
-    public int getHeight(){
+    public float getHeight(){
         return _window.getHeight();
     }
-
-    private Coord conversionCoord(int x, int y){
-        Coord coord = new Coord(x+getWidth()/2, y+getHeight()/2);
-        return coord;
-    };
-
     private class Coord{
         public Coord(int x, int y){
             X=x;
@@ -169,4 +179,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     private Color _colorbg;
     private java.awt.Graphics _graphics;
     private java.awt.image.BufferStrategy _strategy;
+    private AffineTransform old;
+
+    private float _logicW = 640;
+    private float _logicH = 480;
 }
