@@ -15,6 +15,7 @@ public class Player extends GameObject {
         p.y = _path._vertex.get(0).y;
         _actualSegment = _path.directions.get(0);
         _dirSegment = Utils.normalize(_actualSegment);
+        _prevSegment = new Segment(p, p);
     }
 
     public void render(Engine e) {
@@ -38,23 +39,29 @@ public class Player extends GameObject {
         p.x += _dirSegment.x * _speed * (float) deltaTime;
         p.y += _dirSegment.y * _speed * (float) deltaTime;
 
+        _prevSegment.p2 = p;
         if (Utils.sqrDistancePointPoint(p,_actualSegment.p2) < 1)
         {
-            _actualSegment = _path.directions.get(_actualVertex);
+            _actualSegment = _path.directions.get(_counter);
 
             _dirSegment = Utils.normalize(_actualSegment);
-            _actualVertex ++;
-            if (_actualVertex == _path._vertex.size())
-                _actualVertex = 0;
+
+            _prevSegment.p1 = _actualSegment.p1;
+            _prevSegment.p2 = _actualSegment.p1;
+
+            _counter ++;
+            if (_counter == _path._vertex.size())
+                _counter = 0;
         }
 
     }
 
     private float _angle = 20f;
-    private float _speed = 100f;
+    private float _speed = 250f;
     private Segment _actualSegment;
     private Point _dirSegment;
+    private Segment _prevSegment;
     private Path _path;
 
-    private int _actualVertex = 1;
+    private int _counter = 1;
 }

@@ -27,7 +27,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(14);
+        loadLevel(0);
     }
 
     public void update(double deltaTime){
