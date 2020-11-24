@@ -32,7 +32,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
 
     public void init()
     {
-        g = new GraphicsPC(800,800);
+        g = new GraphicsPC(640,480);
         input = new InputPC();
     }
 

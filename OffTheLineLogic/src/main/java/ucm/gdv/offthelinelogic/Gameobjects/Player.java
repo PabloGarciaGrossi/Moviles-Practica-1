@@ -36,9 +36,11 @@ public class Player extends GameObject {
         _x += _dir.x * _speed * (float) deltaTime;
         _y += _dir.y * _speed * (float) deltaTime;
 
-        if (isNear(_path._vertex.get(_actualVertex).x, _path._vertex.get(_actualVertex).y))
+        if (isNearPoint(_path._vertex.get(_actualVertex).x, _path._vertex.get(_actualVertex).y))
         {
             _actualVertex ++;
+            if (_actualVertex == _path._vertex.size())
+                _actualVertex = 0;
             _dir.x = _path._vertex.get(_actualVertex).x - _x;
             _dir.y = _path._vertex.get(_actualVertex).y - _y;
 
@@ -56,8 +58,8 @@ public class Player extends GameObject {
         private float y;
     }
 
-    private boolean isNear(float x, float y){
-        if (Math.abs(_x - x) < 0.5 && Math.abs(_y - y) < 0.5)
+    private boolean isNearPoint(float x, float y){
+        if (Math.abs(_x - x) < 1 && Math.abs(_y - y) < 1)
         {
             return true;
         }
@@ -65,13 +67,13 @@ public class Player extends GameObject {
     }
     private void normalize(Direction d)
     {
-        float a = (float) Math.sqrt(Math.abs((d.x *d.x)) + Math.abs((d.y + d.y)));
+        float a = (float) Math.sqrt(Math.abs((d.x * d.x)) + Math.abs((d.y * d.y)));
         d.x = d.x / a;
         d.y = d.y/ a;
     }
 
     private float _angle = 20f;
-    private float _speed = 50f;
+    private float _speed = 100f;
     private Direction _dir = new Direction();
     private Path _path;
     private int _actualVertex = 1;
