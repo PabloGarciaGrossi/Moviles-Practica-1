@@ -27,7 +27,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(5);
+        loadLevel(14);
     }
 
     public void update(double deltaTime){
@@ -74,6 +74,7 @@ public class OffTheLineLogic implements Logic{
             if ((JsonArray) vertex.get("directions") != null) {
 
             }
+            p.createDirections();
             gameObjects.add(p);
             _paths.add(p);
         }

@@ -50,7 +50,6 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
                     save();
                     translate(getWidth()/2, getHeight()/2);
                     scale(calculateScale());
-                    rotate(180);
                     logic.render();
                 }
                 finally {
@@ -100,7 +99,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     public void scale (float x){
         Graphics2D _g = (Graphics2D) _graphics;
-        _g.scale(-x, x);
+        _g.scale(x, -x);
     }
 
     public void rotate(float angle){

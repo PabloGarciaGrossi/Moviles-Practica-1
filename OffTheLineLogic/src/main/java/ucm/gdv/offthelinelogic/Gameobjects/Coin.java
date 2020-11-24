@@ -16,7 +16,7 @@ public class Coin extends GameObject{
         e.getGraphics().setColor(_color);
 
         e.getGraphics().save();
-        e.getGraphics().translate(c * ((_x - _radius) - _x) - s * ((_y - _radius) -_y) + _x, s * ((_x - _radius) - _x) + c * ((_y - _radius) - _y) + _y);
+        e.getGraphics().translate(c * ((p.x - _radius) - p.x) - s * ((p.y - _radius) -p.y) + p.x, s * ((p.x - _radius) - p.x) + c * ((p.y - _radius) - p.y) + p.y);
         e.getGraphics().rotate(-_angle);
         e.getGraphics().drawLine(- _size/2, - _size/2,  _size/2, - _size/2);
         e.getGraphics().drawLine(_size/2, - _size/2,  _size/2,  _size/2);
