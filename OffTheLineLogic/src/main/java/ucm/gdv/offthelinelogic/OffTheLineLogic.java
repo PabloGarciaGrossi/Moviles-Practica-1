@@ -59,11 +59,10 @@ public class OffTheLineLogic implements Logic{
 
         //Loading paths #####################################################
         JsonArray paths = (JsonArray) levelread.get("paths");
-        Path p = new Path("blue");
         for (int j = 0; j < paths.size(); j++) {
             JsonObject vertex = (JsonObject) paths.get(j);
             JsonArray _v = (JsonArray) vertex.get("vertices");
-
+            Path p = new Path("blue");
             for (int i = 0; i < _v.size(); i++) {
                 JsonObject actualVertex = (JsonObject) _v.get(i);
 
@@ -77,7 +76,9 @@ public class OffTheLineLogic implements Logic{
             if ((JsonArray) vertex.get("directions") != null) {
 
             }
+            p.createDirections();
             gameObjects.add(p);
+            _paths.add(p);
         }
         // ################################################################
 
@@ -110,7 +111,7 @@ public class OffTheLineLogic implements Logic{
             gameObjects.add(nCoin);
         }
 
-        Player player = new Player(0,0, "yellow", 7f, p);
+        Player player = new Player(0,0, "yellow", 7f, _paths.get(0));
         gameObjects.add(player);
 
         //################################################################
@@ -121,4 +122,5 @@ public class OffTheLineLogic implements Logic{
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private InputStreamReader reader;
     private JsonArray levels;
+    List<Path> _paths = new ArrayList<>();
 }

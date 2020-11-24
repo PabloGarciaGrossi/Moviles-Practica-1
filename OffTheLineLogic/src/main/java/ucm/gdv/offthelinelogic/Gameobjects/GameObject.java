@@ -1,12 +1,12 @@
 package ucm.gdv.offthelinelogic.Gameobjects;
 
 import ucm.gdv.engine.Engine;
+import ucm.gdv.offthelinelogic.Point;
 
 public class GameObject {
     public GameObject(float x, float y, float size, String color)
     {
-        _x = x;
-        _y = y;
+        p = new Point(x,y);
         _color = color;
         _size = size;
     }
@@ -15,8 +15,7 @@ public class GameObject {
     };
     public void update (double deltaTime){};
 
-    float _x;
-    float _y;
+    Point p;
     float _size;
     String _color;
 }
