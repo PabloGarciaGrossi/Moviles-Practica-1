@@ -10,6 +10,7 @@ import ucm.gdv.engine.Logic;
 import ucm.gdv.offthelinelogic.Gameobjects.Coin;
 import ucm.gdv.offthelinelogic.Gameobjects.GameObject;
 import ucm.gdv.offthelinelogic.Gameobjects.Path;
+import ucm.gdv.offthelinelogic.Gameobjects.Player;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
@@ -26,7 +27,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(2);
+        loadLevel(0);
     }
 
     public void update(double deltaTime){
@@ -56,11 +57,10 @@ public class OffTheLineLogic implements Logic{
 
         //Loading paths #####################################################
         JsonArray paths = (JsonArray) levelread.get("paths");
-
+        Path p = new Path("blue");
         for (int j = 0; j < paths.size(); j++) {
             JsonObject vertex = (JsonObject) paths.get(j);
             JsonArray _v = (JsonArray) vertex.get("vertices");
-            Path p = new Path("blue");
 
             for (int i = 0; i < _v.size(); i++) {
                 JsonObject actualVertex = (JsonObject) _v.get(i);
@@ -107,6 +107,9 @@ public class OffTheLineLogic implements Logic{
             }
             gameObjects.add(nCoin);
         }
+
+        Player player = new Player(0,0, "yellow", 7f, p);
+        gameObjects.add(player);
 
         //################################################################
 

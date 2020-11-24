@@ -14,23 +14,10 @@ public class Coin extends GameObject{
         float s = (float) Math.sin(b);
         float c = (float) Math.cos(b);
         e.getGraphics().setColor(_color);
-        /*float x1 = c * ((_x - _size/2) - _x) - s * ((_y - _size/2) -_y) + _x;
-        float x2 = c * ((_x + _size/2) - _x) - s * ((_y - _size/2) - _y) + _x;
-        float x3 = c * ((_x + _size/2) - _x) - s * ((_y + _size/2) - _y) + _x;
-        float x4 = c * ((_x - _size/2) - _x) - s * ((_y + _size/2) - _y) + _x;
-
-        float y1 = s * ((_x - _size/2) - _x) + c * ((_y - _size/2) - _y) + _y;
-        float y2 = s * ((_x + _size/2) - _x) + c * ((_y - _size/2) - _y) + _y;
-        float y3 = s * ((_x + _size/2) - _x) + c * ((_y + _size/2) - _y) + _y;
-        float y4 = s * ((_x - _size/2) - _x) + c * ((_y + _size/2) - _y) + _y;
-        e.getGraphics().drawLine(x1, y1, x2, y2);
-        e.getGraphics().drawLine(x2, y2, x3,y3);
-        e.getGraphics().drawLine(x3, y3, x4, y4);
-        e.getGraphics().drawLine(x4, y4, x1, y1);*/
 
         e.getGraphics().save();
         e.getGraphics().translate(c * ((_x - _radius) - _x) - s * ((_y - _radius) -_y) + _x, s * ((_x - _radius) - _x) + c * ((_y - _radius) - _y) + _y);
-        e.getGraphics().rotate(_angle);
+        e.getGraphics().rotate(-_angle);
         e.getGraphics().drawLine(- _size/2, - _size/2,  _size/2, - _size/2);
         e.getGraphics().drawLine(_size/2, - _size/2,  _size/2,  _size/2);
         e.getGraphics().drawLine( _size/2, _size/2,  - _size/2,  _size/2);

@@ -15,8 +15,10 @@ public class Path extends GameObject{
         e.getGraphics().setColor(_color);
         for (int i = 0; i < _vertex.size() - 1; i++) {
             e.getGraphics().drawLine(_vertex.get(i).x, _vertex.get(i).y, _vertex.get(i+1).x, _vertex.get(i+1).y);
+            directions.add(new Vertex(_vertex.get(i+1).y - _vertex.get(i).y, -(_vertex.get(i+1).x - _vertex.get(i).x)));
         }
         e.getGraphics().drawLine(_vertex.get(_vertex.size()-1).x, _vertex.get(_vertex.size()-1).y, _vertex.get(0).x, _vertex.get(0).y);
+        directions.add(new Vertex(_vertex.get(_vertex.size()-1).y - _vertex.get(0).y, -(_vertex.get(_vertex.size()-1).x - _vertex.get(0).x)));
     }
 
     public void update (double deltaTime){
@@ -35,4 +37,5 @@ public class Path extends GameObject{
 
 
     List<Vertex> _vertex = new ArrayList<>();
+    List<Vertex> directions = new ArrayList<>();
 }
