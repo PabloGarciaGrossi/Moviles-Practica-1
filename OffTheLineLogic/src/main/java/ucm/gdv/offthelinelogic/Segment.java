@@ -6,6 +6,11 @@ public class Segment {
         p1 = p1_;
         p2 = p2_;
     }
+
+    public float getDistance()
+    {
+        return Utils.sqrDistancePointPoint(p2, p1);
+    }
     public Point p1;
     public Point p2;
 }

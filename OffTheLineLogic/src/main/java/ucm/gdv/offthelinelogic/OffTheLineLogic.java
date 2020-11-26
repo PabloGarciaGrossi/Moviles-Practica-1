@@ -124,7 +124,7 @@ public class OffTheLineLogic implements Logic{
 
                 Enemy e = new Enemy(x.floatValue(), y.floatValue(), l.floatValue(),"red");
 
-                BigDecimal speedBD, angleBD = null;
+                BigDecimal speedBD, angleBD, offset1, offset2, time1 = null;
                 if(actualEnemy.get("speed") != null) {
                     speedBD = (BigDecimal) actualEnemy.get("speed");
                     e.set_speed(speedBD.floatValue());
@@ -132,6 +132,15 @@ public class OffTheLineLogic implements Logic{
                 if(actualEnemy.get("angle") != null) {
                     angleBD = (BigDecimal) actualEnemy.get("angle");
                     e.set_angle(angleBD.floatValue());
+                }
+                if(actualEnemy.get("offset") != null) {
+                    JsonObject _v = (JsonObject) actualEnemy.get("offset");
+                    offset1 = (BigDecimal) _v.get("x");
+                    offset2 = (BigDecimal) _v.get("y");
+                    e.set_offset(offset1.floatValue(),offset2.floatValue());
+
+                    time1 = (BigDecimal) actualEnemy.get("time1");
+                    e.set_time1(time1.floatValue());
                 }
                 gameObjects.add(e);
             }
