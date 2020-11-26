@@ -8,6 +8,7 @@ import java.util.List;
 import ucm.gdv.engine.Engine;
 import ucm.gdv.engine.Logic;
 import ucm.gdv.offthelinelogic.Gameobjects.Coin;
+import ucm.gdv.offthelinelogic.Gameobjects.Enemy;
 import ucm.gdv.offthelinelogic.Gameobjects.GameObject;
 import ucm.gdv.offthelinelogic.Gameobjects.Path;
 import ucm.gdv.offthelinelogic.Gameobjects.Player;
@@ -27,7 +28,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(0);
+        loadLevel(16);
     }
 
     public void update(double deltaTime){
@@ -107,6 +108,33 @@ public class OffTheLineLogic implements Logic{
                 nCoin.set_angle(angleBD.floatValue());
             }
             gameObjects.add(nCoin);
+        }
+
+        try {
+            JsonArray enemies = (JsonArray) levelread.get("enemies");
+            for (int i = 0; i < enemies.size(); i++){
+                JsonObject actualEnemy = (JsonObject) enemies.get(i);
+
+                BigDecimal x = (BigDecimal) actualEnemy.get("x");
+                BigDecimal y = (BigDecimal) actualEnemy.get("y");
+                BigDecimal l = (BigDecimal) actualEnemy.get("length");
+
+
+                Enemy e = new Enemy(x.floatValue(), y.floatValue(), l.floatValue(),"red");
+
+                BigDecimal speedBD, angleBD = null;
+                if(actualEnemy.get("speed") != null) {
+                    speedBD = (BigDecimal) actualEnemy.get("speed");
+                    e.set_speed(speedBD.floatValue());
+                }
+                if(actualEnemy.get("angle") != null) {
+                    angleBD = (BigDecimal) actualEnemy.get("angle");
+                    e.set_angle(angleBD.floatValue());
+                }
+                gameObjects.add(e);
+            }
+        } catch (Exception e){
+            System.out.println("Error al crear enemigos" + e);
         }
 
         Player player = new Player(0,0, "yellow", 7f, _paths.get(0));
