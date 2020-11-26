@@ -1,6 +1,8 @@
 package ucm.gdv.offthelinelogic;
 
+import java.io.FileDescriptor;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class OffTheLineLogic implements Logic{
         _engine = e;
         //gameObjects.add(new Square(0,0, 40, "blue", 10));
         try{
-            reader = new FileReader("Assets/levels.json");
+            reader = new InputStreamReader(_engine.openInputStream("levels.json"));
             levels = Jsoner.deserializeMany(reader);
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
@@ -146,7 +148,7 @@ public class OffTheLineLogic implements Logic{
     }
     private Engine _engine;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
-    private FileReader reader;
+    private InputStreamReader reader;
     private JsonArray levels;
     List<Path> _paths = new ArrayList<>();
 }

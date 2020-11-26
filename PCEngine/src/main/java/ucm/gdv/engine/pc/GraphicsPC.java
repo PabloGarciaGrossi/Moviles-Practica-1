@@ -1,12 +1,13 @@
 package ucm.gdv.engine.pc;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import ucm.gdv.engine.pc.FontPC;
+import ucm.gdv.engine.Font;
 import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
@@ -73,19 +74,23 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public Font newFont(String filename, int size, Boolean isBold){
-        Font baseFont =  null;
+        FontPC baseFont =  new FontPC();
         String file = "Assets/Fonts/" + filename;
         try (InputStream is = new FileInputStream(file)) {
-            baseFont = Font.createFont(Font.TRUETYPE_FONT, is);
+            baseFont.font.createFont(java.awt.Font.TRUETYPE_FONT, is);
         }
         catch (Exception e) {
             // Ouch. No está.
             System.err.println("Error cargando la fuente: " + e);
         }
-        if(isBold)
-            return baseFont.deriveFont(Font.BOLD, size);
-        else
-            return baseFont.deriveFont(Font.PLAIN, size);
+        if(isBold) baseFont.font.deriveFont(java.awt.Font.BOLD, size);
+        else baseFont.font.deriveFont(java.awt.Font.PLAIN, size);
+
+        _font = baseFont;
+
+        _graphics.setFont(_font.font);
+
+        return baseFont;
     }
 
     public void clear (String color){
@@ -127,10 +132,10 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             return s1;
         else return s2;
     }
-    public void setColor(String colorName){
-        colorName = colorName.toLowerCase();
+    public void setColor(String color){
+        color = color.toLowerCase();
 
-        switch(colorName){
+        switch(color){
             case "red":
                 _colorbg = Color.red;
                 break;
@@ -153,8 +158,8 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         _graphics.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
     }
 
-    public void fillRect(int x, int y, int w, int h){
-        _graphics.fillRect(x, y, w, h);
+    public void fillRect(int x1, int y1, int x2, int y2){
+        _graphics.fillRect(x1, y1, x2, y2);
     }
 
     public void drawText(String text, float x, float y){
@@ -183,4 +188,6 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     private float _logicW = 640;
     private float _logicH = 480;
+
+    FontPC _font;
 }
