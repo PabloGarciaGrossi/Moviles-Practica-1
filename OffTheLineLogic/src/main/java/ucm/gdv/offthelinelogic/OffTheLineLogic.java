@@ -47,6 +47,7 @@ public class OffTheLineLogic implements Logic{
         {
             o.render(_engine);
         }
+
     }
 
     public void handleInput(){

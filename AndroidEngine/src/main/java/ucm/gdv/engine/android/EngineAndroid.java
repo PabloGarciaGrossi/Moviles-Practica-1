@@ -37,7 +37,7 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
 
     public void init(){
         _g = new GraphicsAndroid(_surfaceview, _manager, _surfaceview.getHolder());
-        _input = new InputAndroid();
+        _input = new InputAndroid(_surfaceview);
     };
     public void on_resume(){
         if (!_running) {

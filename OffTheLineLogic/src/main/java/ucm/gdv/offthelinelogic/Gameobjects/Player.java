@@ -22,14 +22,17 @@ public class Player extends GameObject {
         super.render(e);
         e.getGraphics().setColor(_color);
 
-        e.getGraphics().save();
+        //e.getGraphics().save();
         //e.getGraphics().rotate(_angle);
-        e.getGraphics().translate(p.x, p.y);
-        e.getGraphics().drawLine(- _size/2, - _size/2,  _size/2, - _size/2);
-        e.getGraphics().drawLine(_size/2, - _size/2,  _size/2,  _size/2);
-        e.getGraphics().drawLine( _size/2, _size/2,  - _size/2,  _size/2);
-        e.getGraphics().drawLine(- _size/2,  _size/2, - _size/2, - _size/2);
-        e.getGraphics().restore();
+        //e.getGraphics().translate(p.x, p.y);
+        Point segPOS=_path._vertex.get(0);
+        Point playerPOS=p;
+
+        e.getGraphics().drawLine(p.x - _size/2, p.y - _size/2,  p.x +_size/2, p.y - _size/2);
+        e.getGraphics().drawLine(p.x + _size/2, p.y - _size/2,  p.x + _size/2,  p.y + _size/2);
+        e.getGraphics().drawLine( p.x + _size/2, p.y + _size/2,  p.x - _size/2,  p.y + _size/2);
+        e.getGraphics().drawLine(p.x - _size/2,  p.y + _size/2, p.x - _size/2, p.y - _size/2);
+        //e.getGraphics().restore();
     }
 
     public void update(double deltaTime) {
@@ -46,6 +49,13 @@ public class Player extends GameObject {
             _actualSegment = _path.directions.get(_counter);
 
             _dirSegment = Utils.normalize(_actualSegment);
+
+            if(_dirSegment.y == 0){
+                p.y = _actualSegment.p1.y;
+            }
+            else if(_dirSegment.x == 0){
+                p.x = _actualSegment.p1.x;
+            }
 
             distance = 0;
             _counter ++;
