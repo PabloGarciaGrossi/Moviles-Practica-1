@@ -17,8 +17,8 @@ import ucm.gdv.engine.Logic;
 
 public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
-    public GraphicsPC(int w, int h){
-        _window = new JFrame("ventana");
+    public GraphicsPC(JFrame win, int w, int h){
+        _window = win;
         _window.setSize(w, h);
         _window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _window.setIgnoreRepaint(true);

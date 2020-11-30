@@ -32,12 +32,14 @@ public class EnginePC implements ucm.gdv.engine.Engine {
 
     public void init()
     {
-        g = new GraphicsPC(640,480);
+        jf = new JFrame("Jframe");
+        g = new GraphicsPC(jf,640,480);
         input = new InputPC();
     }
 
     public void run(){
         long lastFrameTime = System.nanoTime();
+        jf.addMouseListener(input.getMl());
         while(true) {
             if(logic!=null) {
                 long currentTime = System.nanoTime();
@@ -57,5 +59,6 @@ public class EnginePC implements ucm.gdv.engine.Engine {
     private  GraphicsPC g;
     private InputPC input;
 
+    JFrame jf;
     Logic logic=null;
 }

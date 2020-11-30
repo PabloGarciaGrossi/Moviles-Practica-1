@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ucm.gdv.engine.Engine;
+import ucm.gdv.engine.Input;
 import ucm.gdv.engine.Logic;
 import ucm.gdv.offthelinelogic.Gameobjects.Coin;
 import ucm.gdv.offthelinelogic.Gameobjects.Enemy;
@@ -34,7 +35,7 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void update(double deltaTime){
-        for (GameObject o : gameObjects)
+        for (GameObject o : _level.getGameobjects())
         {
             o.update(deltaTime);
         }
@@ -42,14 +43,18 @@ public class OffTheLineLogic implements Logic{
 
 
     public void render(){
-        for (GameObject o : gameObjects)
+        for (GameObject o : _level.getGameobjects())
         {
             o.render(_engine);
         }
     }
 
     public void handleInput(){
-
+            for (Input.TouchEvent t : _engine.getInput().getTouchEvents()) {
+                if (t.typeEvent == Input.type.PULSAR) {
+                    System.out.println("mi polla con cebolla");
+                }
+            }
     }
 
     public void loadLevel(int level){
@@ -78,8 +83,7 @@ public class OffTheLineLogic implements Logic{
 
             }
             p.createDirections();
-            gameObjects.add(p);
-            _paths.add(p);
+            _level._paths.add(p);
         }
         // ################################################################
 
@@ -110,6 +114,7 @@ public class OffTheLineLogic implements Logic{
                 nCoin.set_angle(angleBD.floatValue());
             }
             gameObjects.add(nCoin);
+            _level._coins.add(nCoin);
         }
 
         try {
@@ -142,14 +147,13 @@ public class OffTheLineLogic implements Logic{
                     time1 = (BigDecimal) actualEnemy.get("time1");
                     e.set_time1(time1.floatValue());
                 }
-                gameObjects.add(e);
+                _level._enemies.add(e);
             }
         } catch (Exception e){
             System.out.println("Error al crear enemigos" + e);
         }
 
-        Player player = new Player(0,0, "yellow", 7f, _paths.get(0));
-        gameObjects.add(player);
+        _level._player = new Player(0,0, "yellow", 7f, _level._paths.get(0));
 
         //################################################################
 
@@ -159,5 +163,22 @@ public class OffTheLineLogic implements Logic{
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private InputStreamReader reader;
     private JsonArray levels;
-    List<Path> _paths = new ArrayList<>();
+    private Level _level = new Level();
+    class Level
+    {
+        public List<Path> _paths = new ArrayList<>();
+        public List<Coin> _coins = new ArrayList<>();
+        public List <Enemy> _enemies = new ArrayList<>();
+        public Player _player;
+
+        public List<GameObject> getGameobjects(){
+            List<GameObject> l = new ArrayList<>();
+            l.addAll(_paths);
+            l.addAll(_coins);
+            l.addAll(_enemies);
+            l.add(_player);
+            return l;
+        }
+    };
+
 }
