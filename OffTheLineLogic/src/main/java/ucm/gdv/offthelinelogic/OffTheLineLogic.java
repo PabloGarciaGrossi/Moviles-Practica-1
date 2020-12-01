@@ -34,7 +34,37 @@ public class OffTheLineLogic implements Logic{
         loadLevel(actLVL);
     }
 
+    private boolean AreColliding(GameObject o1, GameObject o2){
+        if(o1 != o2){
+            Point o1_p = new Point(o1.getPos().x - o1.getSize()/2, o1.getPos().y + o1.getSize()/2);
+
+            Point o2_p = new Point(o2.getPos().x - o2.getSize()/2, o2.getPos().y + o2.getSize()/2);
+
+            if(o1_p.x >= o2_p.x && o1_p.x<=o2_p.x+o2.getSize()
+                    && o1_p.y>=o2_p.y && o1_p.y<=o2_p.y+o2.getSize()){
+                return true;
+            }
+            else if(o2_p.x >= o1_p.x && o2_p.x<=o1_p.x+o1.getSize()
+                    && o2_p.y>=o1_p.y && o2_p.y<=o1_p.y+o1.getSize()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void checkCollisions(){
+        for(GameObject o1: _level.getGameobjects()){
+            for(GameObject o2: _level.getGameobjects()){
+                if(AreColliding(o1, o2)){
+                    o1.OnCollision(o2);
+                    o2.OnCollision(o1);
+                };
+            }
+        }
+    }
+
     public void update(double deltaTime){
+
         if(isWorking()) {
             for (GameObject o : _level.getGameobjects()) {
                 o.update(deltaTime);
@@ -59,12 +89,10 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void handleInput(){
-            for (Input.TouchEvent t : _engine.getInput().getTouchEvents()) {
-                if (t.typeEvent == Input.type.PULSAR) {
-                    if(!_level._player.jumping)
-                        _level._player.jump();
-                }
-            }
+        for (GameObject o : _level.getGameobjects())
+        {
+            o.handleInput(_engine);
+        }
     }
 
     public void playerDeath(){
@@ -252,7 +280,6 @@ public class OffTheLineLogic implements Logic{
         } catch (Exception e){
             System.out.println("No hay enemigos en este nivel");
         }
-
         //################################################################
 
         _level._player = new Player(0,0, "white", 12f, _level._paths.get(0));

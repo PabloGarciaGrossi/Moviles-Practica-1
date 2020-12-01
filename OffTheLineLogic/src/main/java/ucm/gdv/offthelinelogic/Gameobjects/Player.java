@@ -3,6 +3,7 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import java.util.List;
 
 import ucm.gdv.engine.Engine;
+import ucm.gdv.engine.Input;
 import ucm.gdv.offthelinelogic.Point;
 import ucm.gdv.offthelinelogic.Segment;
 import ucm.gdv.offthelinelogic.Utils;
@@ -16,12 +17,12 @@ public class Player extends GameObject {
         _actualSegment = _path.segments.get(0);
         _dirSegment = Utils.normalize(_actualSegment);
         distToPoint = _actualSegment.getDistance();
+        _tag = "Player";
     }
 
     public void render(Engine e) {
         super.render(e);
         e.getGraphics().setColor(_color);
-
         double b = Math.toRadians(_angle);
         float s = (float) Math.sin(b);
         float c = (float) Math.cos(b);
@@ -34,7 +35,6 @@ public class Player extends GameObject {
         e.getGraphics().drawLine( + _size/2,  - _size/2,   + _size/2,   + _size/2);
         e.getGraphics().drawLine(  + _size/2,  + _size/2,   - _size/2,  + _size/2);
         e.getGraphics().drawLine(- _size/2,  + _size/2, - _size/2, - _size/2);
-        //e.getGraphics().restore();
     }
 
     public void update(double deltaTime) {
@@ -42,13 +42,20 @@ public class Player extends GameObject {
         //_x+=_speed*deltaTime;
         _angle += 120 * deltaTime;
         Point prev = new Point(p.x, p.y);
+        float actSpeed=_speed;
+        if(jumping) actSpeed=_jumpingSpeed;
+        p.x += _dirSegment.x * dirNum * actSpeed * (float) deltaTime;
+        p.y += _dirSegment.y * dirNum * actSpeed * (float) deltaTime;
 
-        p.x += _dirSegment.x * dirNum * _speed * (float) deltaTime;
-        p.y += _dirSegment.y * dirNum * _speed * (float) deltaTime;
+        if(!jumping) {//mientras no encuentre otra solución necesito esta wea para que se ajuste al camino en android
+            if (_dirSegment.x == 0) p.x = _actualSegment.p1.x;
+            else if (_dirSegment.y == 0) p.y = _actualSegment.p1.y;
+        }
 
         _collisionSegment = new Segment(prev, p);
 
-        distance += _speed * (float) deltaTime;
+        //distance += _speed * (float) deltaTime;
+        distance += actSpeed * (float) deltaTime;
 
         if (!jumping && distance > distToPoint)
         {
@@ -68,6 +75,19 @@ public class Player extends GameObject {
             distance = 0;
         }
 
+    }
+
+    public void handleInput(Engine e){
+        for(Input.TouchEvent event: e.getInput().getTouchEvents()){
+            if(event.typeEvent==Input.type.PULSAR){
+                if(!jumping) jump();
+            }
+        }
+    }
+
+    public void OnCollision(GameObject other) {
+        super.OnCollision(other);
+        if(other._tag=="Coin") System.out.println("Buenardo");
     }
 
     public void jump(){
@@ -101,6 +121,7 @@ public class Player extends GameObject {
             _dirSegment = Utils.normalize(_actualSegment);
             distToPoint = Utils.sqrDistancePointPoint(p, _actualSegment.p2);
         }
+
         distance = 0;
         _speed = 250f;
     }
@@ -120,6 +141,7 @@ public class Player extends GameObject {
 
     private float _angle = 20f;
     private float _speed = 250f;
+    private float _jumpingSpeed = 1500f;
     private float distance = 0f;
     private float distToPoint = 0;
     private Segment _actualSegment;

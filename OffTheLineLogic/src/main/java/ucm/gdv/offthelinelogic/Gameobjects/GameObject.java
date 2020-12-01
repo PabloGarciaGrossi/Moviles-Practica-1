@@ -15,8 +15,16 @@ public class GameObject {
     };
     public void update (double deltaTime){};
 
-    public Point get_position(){return p;}
+    public void OnCollision(GameObject other){};
+
+    public void handleInput(Engine e){};
+
+    public Point getPos(){return p;}
+
+    public float getSize(){return _size;}
+
     Point p;
     float _size;
     String _color;
+    String _tag;
 }
