@@ -101,10 +101,10 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void checkPlayerOutofBounds(){
-        if (_level._player.get_position().x > _engine.getGraphics().getWidth()/2 ||
-                _level._player.get_position().y > _engine.getGraphics().getHeight()/2 ||
-                _level._player.get_position().x < -_engine.getGraphics().getWidth()/2 ||
-                _level._player.get_position().y <  -_engine.getGraphics().getHeight()/2)
+        if (_level._player.getPos().x > _engine.getGraphics().getWidth()/2 ||
+                _level._player.getPos().y > _engine.getGraphics().getHeight()/2 ||
+                _level._player.getPos().x < -_engine.getGraphics().getWidth()/2 ||
+                _level._player.getPos().y <  -_engine.getGraphics().getHeight()/2)
             playerDeath();
     }
     public boolean pathCollision(Segment s1, Segment s2){
@@ -149,7 +149,7 @@ public class OffTheLineLogic implements Logic{
 
     public void checkCoinCollision(){
         for (int m = 0; m < _level._coins.size(); m++){
-            if(Utils.sqrDistancePointPoint(_level._coins.get(m).get_position(), _level._player.get_position()) < 15f)
+            if(Utils.sqrDistancePointPoint(_level._coins.get(m).getPos(), _level._player.getPos()) < 15f)
             {
                 _level._coins.get(m).initDeath();
             }
@@ -162,6 +162,7 @@ public class OffTheLineLogic implements Logic{
                 _level._coins.remove(_level._coins.get(m));
         }
     }
+
     public void lvlFinished(){
         if(_level._coins.isEmpty()) {
             actLVL += 1;
@@ -303,7 +304,7 @@ public class OffTheLineLogic implements Logic{
     private Level _level = new Level();
 
     public float lifes = 10f;
-    public int actLVL = 19;
+    public int actLVL = 0;
     public boolean working = true;
     class Level
     {
