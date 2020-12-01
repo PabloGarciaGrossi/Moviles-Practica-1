@@ -39,7 +39,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             return;
         }
         _strategy = _window.getBufferStrategy();
-
+        _graphics = _strategy.getDrawGraphics();
 
     }
 
@@ -80,12 +80,10 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         try (InputStream is = new FileInputStream(file)) {
             baseFont.font = baseFont.font.createFont(java.awt.Font.TRUETYPE_FONT, is);
 
-            if(isBold) baseFont.font.deriveFont(java.awt.Font.BOLD, size);
-            else baseFont.font.deriveFont(java.awt.Font.PLAIN, size);
+            if(isBold) baseFont.font = baseFont.font.deriveFont(java.awt.Font.BOLD, size);
+            else baseFont.font = baseFont.font.deriveFont(java.awt.Font.PLAIN, size);
 
-            _font = baseFont;
-
-            _graphics.setFont(_font.font);
+            _font=baseFont;
         }
         catch (Exception e) {
             // Ouch. No está.
@@ -107,7 +105,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     public void scale (float x){
         Graphics2D _g = (Graphics2D) _graphics;
-        _g.scale(x, -x);
+        _g.scale(x, x);
     }
 
     public void rotate(float angle){
@@ -166,6 +164,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void drawText(String text, float x, float y){
+        _graphics.setFont(_font.font);
         _graphics.drawString(text, (int) x, (int) y);
     }
 

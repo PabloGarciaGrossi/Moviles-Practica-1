@@ -83,7 +83,8 @@ public class OffTheLineLogic implements Logic{
 
 
     public void render(){
-        _engine.getGraphics().drawText(_level.lvlName, 20, 20);
+        _engine.getGraphics().setColor("White");
+        _engine.getGraphics().drawText(_level.lvlName, -300, 150);
         for (GameObject o : _level.getGameobjects())
         {
             o.render(_engine);
@@ -138,15 +139,17 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void checkEnemyCollision(){
-        Segment col = _level._player.get_collisionSegment();
-        int i = 0;
-        boolean found = false;
-        while (!found && i < _level._enemies.size()) {
-            if (pathCollision(col, _level._enemies.get(i).get_segment())) {
-                playerDeath();
-                found = true;
+        if(_level._player.jumping) {
+            Segment col = _level._player.get_collisionSegment();
+            int i = 0;
+            boolean found = false;
+            while (!found && i < _level._enemies.size()) {
+                if (pathCollision(col, _level._enemies.get(i).get_segment())) {
+                    playerDeath();
+                    found = true;
+                }
+                i++;
             }
-            i++;
         }
     }
 

@@ -15,7 +15,7 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
         _surfaceview = surfaceView;
         _manager = manager;
     }
-    public Graphics getGraphics(){
+    public GraphicsAndroid getGraphics(){
         return _g;
     };
 

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -34,7 +35,8 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
 
     public Font newFont(String filename, int size, Boolean isBold){
         _font = new FontAndroid();
-        _font.font = _font.font.createFromAsset(_manager, filename);
+
+        _font.font = Typeface.createFromAsset(_manager, "Fonts/" + filename);
         _paint.setTypeface(_font.font);
         _paint.setTextSize(size);
         _paint.setFakeBoldText(isBold);
@@ -64,7 +66,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
     };
 
     public void scale (float x){
-        canvas_.scale(x, x);
+        canvas_.scale(-x, -x);
     };
 
     public void rotate(float angle){

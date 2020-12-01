@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         _surface = new SurfaceView(this);
         _engine = new EngineAndroid(_surface, getAssets());
+        _engine.init();
         _logic = new OffTheLineLogic(_engine);
         _engine.setLogic(_logic);
-        _engine.init();
         setContentView(_engine.getSurfaceView());
     }
     protected void onResume(){
