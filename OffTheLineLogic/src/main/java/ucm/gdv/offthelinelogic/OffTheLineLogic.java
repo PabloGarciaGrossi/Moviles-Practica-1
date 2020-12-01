@@ -35,54 +35,18 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void update(double deltaTime){
-        for (GameObject o : _level.getGameobjects())
-        {
-            o.update(deltaTime);
-        }
-        if(_level._player.jumping){
-            int i = 0;
-            boolean found = false;
-            Segment col = _level._player.get_collisionSegment();
-            while(!found && i < _level._enemies.size()) {
-                if(pathCollision(col, _level._enemies.get(i).get_segment()))
-                {
-                    playerDeath();
-                    found = true;
-                }
-                i++;
+        if(isWorking()) {
+            for (GameObject o : _level.getGameobjects()) {
+                o.update(deltaTime);
             }
-            i = 0;
-            while (!found && i < _level._paths.size())
-            {
-                int j = 0;
-                while(!found && j < _level._paths.get(i).getSegments().size()) {
-                    if (pathCollision(col, _level._paths.get(i).getSegments().get(j))) {
-                        Segment s = _level._paths.get(i).getSegments().get(j);
-                        if(s != _level._player.get_actualSegment()) {
-                            Path p = _level._paths.get(i);
-                            _level._player.setNewDirSegment(s, p);
-                            found = true;
-                        }
-                    }
-                    j++;
-                }
-                i++;
-            }
-        }
+            checkEnemyCollision();
+            checkPathCollision();
+            checkCoinCollision();
+            removeCoins();
 
-        for (int i = 0; i < _level._coins.size(); i++){
-            if(Utils.sqrDistancePointPoint(_level._coins.get(i).get_position(), _level._player.get_position()) < 20f)
-            {
-                _level._coins.get(i).initDeath();
-            }
+            checkPlayerOutofBounds();
+            lvlFinished();
         }
-
-        for (int i = 0; i < _level._coins.size(); i++){
-            if(_level._coins.get(i).isDead())
-                _level._coins.remove(_level._coins.get(i));
-        }
-        lvlFinished();
-        //checkPlayerOutofBounds();
     }
 
 
@@ -109,17 +73,78 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void checkPlayerOutofBounds(){
-        if (_level._player.get_position().x > _engine.getGraphics().getWidth()/2 || _level._player.get_position().y > _engine.getGraphics().getHeight()/2 || _level._player.get_position().x < -_engine.getGraphics().getWidth()/2 || _level._player.get_position().x <  -_engine.getGraphics().getHeight()/2)
+        if (_level._player.get_position().x > _engine.getGraphics().getWidth()/2 ||
+                _level._player.get_position().y > _engine.getGraphics().getHeight()/2 ||
+                _level._player.get_position().x < -_engine.getGraphics().getWidth()/2 ||
+                _level._player.get_position().y <  -_engine.getGraphics().getHeight()/2)
             playerDeath();
     }
     public boolean pathCollision(Segment s1, Segment s2){
         return Utils.segmentCollition(s1.p1, s1.p2, s2.p1, s2.p2);
     }
 
+    public void checkPathCollision(){
+        int i = 0;
+        boolean found = false;
+        Segment col = _level._player.get_collisionSegment();
+        if(_level._player.jumping) {
+            while (!found && i < _level._paths.size()) {
+                int j = 0;
+                while (!found && j < _level._paths.get(i).getSegments().size()) {
+                    if (pathCollision(col, _level._paths.get(i).getSegments().get(j)) && _level._player.getDistance() > 5f) {
+                        Segment s = _level._paths.get(i).getSegments().get(j);
+                        if (s != _level._player.get_actualSegment()) {
+                            Path p = _level._paths.get(i);
+                            _level._player.setNewDirSegment(s, p);
+                            found = true;
+                        }
+                    }
+                    j++;
+                }
+                i++;
+            }
+        }
+    }
+
+    public void checkEnemyCollision(){
+        Segment col = _level._player.get_collisionSegment();
+        int i = 0;
+        boolean found = false;
+        while (!found && i < _level._enemies.size()) {
+            if (pathCollision(col, _level._enemies.get(i).get_segment())) {
+                playerDeath();
+                found = true;
+            }
+            i++;
+        }
+    }
+
+    public void checkCoinCollision(){
+        for (int m = 0; m < _level._coins.size(); m++){
+            if(Utils.sqrDistancePointPoint(_level._coins.get(m).get_position(), _level._player.get_position()) < 15f)
+            {
+                _level._coins.get(m).initDeath();
+            }
+        }
+    }
+
+    public void removeCoins(){
+        for (int m = 0; m < _level._coins.size(); m++){
+            if(_level._coins.get(m).isDead())
+                _level._coins.remove(_level._coins.get(m));
+        }
+    }
     public void lvlFinished(){
         if(_level._coins.isEmpty()) {
-            endLevel();
-            loadLevel(actLVL);
+            actLVL += 1;
+            if(actLVL > 19)
+            {
+                working = false;
+            }
+            else {
+                endLevel();
+                loadLevel(actLVL);
+            }
         }
     }
 
@@ -230,15 +255,18 @@ public class OffTheLineLogic implements Logic{
 
         //################################################################
 
-        _level._player = new Player(0,0, "yellow", 12f, _level._paths.get(0));
+        _level._player = new Player(0,0, "white", 12f, _level._paths.get(0));
 
     }
 
     void endLevel(){
-        actLVL += 1;
         _level._enemies.clear();
         _level._paths.clear();
         _level._coins.clear();
+    }
+
+    public boolean isWorking(){
+        return  working;
     }
     
     private Engine _engine;
@@ -248,7 +276,8 @@ public class OffTheLineLogic implements Logic{
     private Level _level = new Level();
 
     public float lifes = 10f;
-    public int actLVL = 0;
+    public int actLVL = 19;
+    public boolean working = true;
     class Level
     {
         public List<Path> _paths = new ArrayList<>();

@@ -85,6 +85,7 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
             _logic.update(elapsedTime);
             _g.render(_logic);
             _logic.handleInput();
+            _running = _logic.isWorking();
         }
     };
 

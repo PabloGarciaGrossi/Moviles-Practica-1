@@ -22,16 +22,18 @@ public class Player extends GameObject {
         super.render(e);
         e.getGraphics().setColor(_color);
 
-        //e.getGraphics().save();
-        //e.getGraphics().rotate(_angle);
-        //e.getGraphics().translate(p.x, p.y);
+        double b = Math.toRadians(_angle);
+        float s = (float) Math.sin(b);
+        float c = (float) Math.cos(b);
+
         Point segPOS=_path._vertex.get(0);
         Point playerPOS=p;
-
-        e.getGraphics().drawLine(p.x - _size/2, p.y - _size/2,  p.x +_size/2, p.y - _size/2);
-        e.getGraphics().drawLine(p.x + _size/2, p.y - _size/2,  p.x + _size/2,  p.y + _size/2);
-        e.getGraphics().drawLine( p.x + _size/2, p.y + _size/2,  p.x - _size/2,  p.y + _size/2);
-        e.getGraphics().drawLine(p.x - _size/2,  p.y + _size/2, p.x - _size/2, p.y - _size/2);
+        e.getGraphics().translate(p.x, p.y);
+        e.getGraphics().rotate(_angle * dirNum);
+        e.getGraphics().drawLine(- _size/2,  - _size/2,   + _size/2,  - _size/2);
+        e.getGraphics().drawLine( + _size/2,  - _size/2,   + _size/2,   + _size/2);
+        e.getGraphics().drawLine(  + _size/2,  + _size/2,   - _size/2,  + _size/2);
+        e.getGraphics().drawLine(- _size/2,  + _size/2, - _size/2, - _size/2);
         //e.getGraphics().restore();
     }
 
@@ -45,6 +47,7 @@ public class Player extends GameObject {
         p.y += _dirSegment.y * dirNum * _speed * (float) deltaTime;
 
         _collisionSegment = new Segment(prev, p);
+
         distance += _speed * (float) deltaTime;
 
         if (!jumping && distance > distToPoint)
@@ -74,13 +77,15 @@ public class Player extends GameObject {
             _dirSegment = Utils.multVector(_path._directions.get(_counter), dirNum);
         }
         jumping = true;
-        _speed *= 3;
+        _speed = 1000;
+        distance = 0;
     }
 
     public Segment get_collisionSegment(){
         return _collisionSegment;
     }
     public Segment get_actualSegment() {return  _actualSegment;}
+    public float getDistance(){return  distance;}
 
     public void setNewDirSegment(Segment s, Path pa){
         _actualSegment = s;
@@ -97,7 +102,7 @@ public class Player extends GameObject {
             distToPoint = Utils.sqrDistancePointPoint(p, _actualSegment.p2);
         }
         distance = 0;
-        _speed /= 3;
+        _speed = 250f;
     }
 
     public void playerDeath(Path pa){
@@ -110,7 +115,7 @@ public class Player extends GameObject {
         dirNum = 1;
         jumping = false;
         _counter = 0;
-        _speed /= 3;
+        _speed = 250f;
     }
 
     private float _angle = 20f;

@@ -147,6 +147,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
                 break;
             case "white":
                 _colorbg = Color.white;
+                break;
             default:
                 _colorbg = Color.black;
                 break;

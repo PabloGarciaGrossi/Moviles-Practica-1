@@ -40,7 +40,8 @@ public class EnginePC implements ucm.gdv.engine.Engine {
     public void run(){
         long lastFrameTime = System.nanoTime();
         jf.addMouseListener(input.getMl());
-        while(true) {
+        boolean working = true;
+        while(working) {
             if(logic!=null) {
                 long currentTime = System.nanoTime();
                 long nanoElapsedTime = currentTime - lastFrameTime;
@@ -49,6 +50,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
                 g.render(logic);
                 logic.update(deltaTime);
                 logic.handleInput();
+                working = logic.isWorking();
             }
         }
     }
