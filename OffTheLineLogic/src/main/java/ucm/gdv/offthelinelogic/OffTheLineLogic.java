@@ -99,20 +99,20 @@ public class OffTheLineLogic implements Logic{
                 i++;
             }
         }
-
+        /*
         for (int i = 0; i < _level._coins.size(); i++){
-            if(Utils.sqrDistancePointPoint(_level._coins.get(i).get_position(), _level._player.get_position()) < 20f)
+            if(Utils.sqrDistancePointPoint(_level._coins.get(i).getPos(), _level._player.getPos()) < 20f)
             {
                 _level._coins.get(i).initDeath();
             }
         }
-
+        */
         for (int i = 0; i < _level._coins.size(); i++){
             if(_level._coins.get(i).isDead())
                 _level._coins.remove(_level._coins.get(i));
         }
         lvlFinished();
-        //checkPlayerOutofBounds();
+        checkPlayerOutofBounds();
     }
 
 
@@ -137,7 +137,7 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void checkPlayerOutofBounds(){
-        if (_level._player.get_position().x > _engine.getGraphics().getWidth()/2 || _level._player.get_position().y > _engine.getGraphics().getHeight()/2 || _level._player.get_position().x < -_engine.getGraphics().getWidth()/2 || _level._player.get_position().x <  -_engine.getGraphics().getHeight()/2)
+        if (_level._player.getPos().x > _engine.getGraphics().getWidth()/2 || _level._player.getPos().y > _engine.getGraphics().getHeight()/2 || _level._player.getPos().x < -_engine.getGraphics().getWidth()/2 || _level._player.getPos().x <  -_engine.getGraphics().getHeight()/2)
             playerDeath();
     }
     public boolean pathCollision(Segment s1, Segment s2){

@@ -10,25 +10,22 @@ public class Coin extends GameObject{
 
     @Override
     public void render(Engine e) {
-        if(_active) {
-            super.render(e);
-            double b = Math.toRadians(_angle);
-            float s = (float) Math.sin(b);
-            float c = (float) Math.cos(b);
-            e.getGraphics().setColor(_color);
+        super.render(e);
 
-            e.getGraphics().save();
-            e.getGraphics().translate(c * ((p.x - _radius) - p.x) - s * ((p.y - _radius) - p.y) + p.x, s * ((p.x - _radius) - p.x) + c * ((p.y - _radius) - p.y) + p.y);
-            e.getGraphics().rotate(-_angle);
-            e.getGraphics().drawLine(-_size / 2, -_size / 2, _size / 2, -_size / 2);
-            e.getGraphics().drawLine(_size / 2, -_size / 2, _size / 2, _size / 2);
-            e.getGraphics().drawLine(_size / 2, _size / 2, -_size / 2, _size / 2);
-            e.getGraphics().drawLine(-_size / 2, _size / 2, -_size / 2, -_size / 2);
-            e.getGraphics().restore();
-        }
+        double b = Math.toRadians(_angle);
+        float s = (float) Math.sin(b);
+        float c = (float) Math.cos(b);
+        e.getGraphics().setColor(_color);
+        e.getGraphics().save();
+        e.getGraphics().translate(c * ((p.x - _radius) - p.x) - s * ((p.y - _radius) - p.y) + p.x, s * ((p.x - _radius) - p.x) + c * ((p.y - _radius) - p.y) + p.y);
+        e.getGraphics().rotate(-_angle);
+
+        e.getGraphics().drawLine(-_size / 2, -_size / 2, _size / 2, -_size / 2);
+        e.getGraphics().drawLine(_size / 2, -_size / 2, _size / 2, _size / 2);
+        e.getGraphics().drawLine(_size / 2, _size / 2, -_size / 2, _size / 2);
+        e.getGraphics().drawLine(-_size / 2, _size / 2, -_size / 2, -_size / 2);
+        e.getGraphics().restore();
     }
-
-
 
     @Override
     public void update(double deltaTime) {
@@ -51,7 +48,7 @@ public class Coin extends GameObject{
 
     public void OnCollision(GameObject other){
         super.OnCollision(other);
-        if(other._tag=="Player") _active=false;
+        if(other._tag=="Player") initDeath();
     }
 
     public void initDeath(){initDeath = true;}
@@ -72,7 +69,6 @@ public class Coin extends GameObject{
     float _radius;
     float _angle;
 
-    boolean _active=true;
     boolean initDeath = false;
     boolean dead = false;
     float deadCD = 0f;
