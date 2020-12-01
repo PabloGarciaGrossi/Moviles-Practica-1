@@ -15,6 +15,7 @@ public class GameObject {
     };
     public void update (double deltaTime){};
 
+    public Point get_position(){return p;}
     Point p;
     float _size;
     String _color;

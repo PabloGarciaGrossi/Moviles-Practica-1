@@ -31,7 +31,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(1);
+        loadLevel(actLVL);
     }
 
     public void update(double deltaTime){
@@ -42,11 +42,20 @@ public class OffTheLineLogic implements Logic{
         if(_level._player.jumping){
             int i = 0;
             boolean found = false;
+            Segment col = _level._player.get_collisionSegment();
+            while(!found && i < _level._enemies.size()) {
+                if(pathCollision(col, _level._enemies.get(i).get_segment()))
+                {
+                    playerDeath();
+                    found = true;
+                }
+                i++;
+            }
+            i = 0;
             while (!found && i < _level._paths.size())
             {
                 int j = 0;
                 while(!found && j < _level._paths.get(i).getSegments().size()) {
-                    Segment col = _level._player.get_collisionSegment();
                     if (pathCollision(col, _level._paths.get(i).getSegments().get(j))) {
                         Segment s = _level._paths.get(i).getSegments().get(j);
                         if(s != _level._player.get_actualSegment()) {
@@ -60,6 +69,20 @@ public class OffTheLineLogic implements Logic{
                 i++;
             }
         }
+
+        for (int i = 0; i < _level._coins.size(); i++){
+            if(Utils.sqrDistancePointPoint(_level._coins.get(i).get_position(), _level._player.get_position()) < 20f)
+            {
+                _level._coins.get(i).initDeath();
+            }
+        }
+
+        for (int i = 0; i < _level._coins.size(); i++){
+            if(_level._coins.get(i).isDead())
+                _level._coins.remove(_level._coins.get(i));
+        }
+        lvlFinished();
+        //checkPlayerOutofBounds();
     }
 
 
@@ -80,28 +103,28 @@ public class OffTheLineLogic implements Logic{
             }
     }
 
+    public void playerDeath(){
+        _level._player.playerDeath(_level._paths.get(0));
+        lifes -= 1;
+    }
+
+    public void checkPlayerOutofBounds(){
+        if (_level._player.get_position().x > _engine.getGraphics().getWidth()/2 || _level._player.get_position().y > _engine.getGraphics().getHeight()/2 || _level._player.get_position().x < -_engine.getGraphics().getWidth()/2 || _level._player.get_position().x <  -_engine.getGraphics().getHeight()/2)
+            playerDeath();
+    }
     public boolean pathCollision(Segment s1, Segment s2){
         return Utils.segmentCollition(s1.p1, s1.p2, s2.p1, s2.p2);
     }
 
-    /*public List<Segment> possiblePathCollision(){
-        List<Segment> l = new ArrayList<Segment>();
-        Segment direction = _level._player.getLongDirection();
-        for(int i = 0; i < _level._paths.size(); i++)
-        {
-            for (int j = 0; j < _level._paths.get(i).getSegments().size(); j++)
-            {
-                if(pathCollision(direction, _level._paths.get(i).getSegments().get(j)))
-                {
-                    l.add(_level._paths.get(i).getSegments().get(j));
-                }
-            }
+    public void lvlFinished(){
+        if(_level._coins.isEmpty()) {
+            endLevel();
+            loadLevel(actLVL);
         }
-        return l;
-    }*/
+    }
+
     public void loadLevel(int level){
         JsonArray levelsArray = (JsonArray) levels.get(0);
-        //System.out.println(levelsArray);
 
         JsonObject levelread = (JsonObject)levelsArray.get(level);
 
@@ -134,16 +157,12 @@ public class OffTheLineLogic implements Logic{
                     p.addDirection(x.floatValue(), y.floatValue());
                 }
             }
-            else{
-                p.automatizeDirections();
-            }
             _level._paths.add(p);
         }
         // ################################################################
 
         // Carga de monedas ###############################################
         JsonArray items = (JsonArray) levelread.get("items");
-        System.out.println(items);
 
         for (int i = 0; i < items.size(); i++)
         {
@@ -167,7 +186,6 @@ public class OffTheLineLogic implements Logic{
                 angleBD = (BigDecimal) actualItem.get("angle");
                 nCoin.set_angle(angleBD.floatValue());
             }
-            gameObjects.add(nCoin);
             _level._coins.add(nCoin);
         }
 
@@ -207,20 +225,30 @@ public class OffTheLineLogic implements Logic{
                 _level._enemies.add(e);
             }
         } catch (Exception e){
-            System.out.println("Error al crear enemigos" + e);
+            System.out.println("No hay enemigos en este nivel");
         }
-
-        _level._player = new Player(0,0, "yellow", 7f, _level._paths.get(0));
 
         //################################################################
 
+        _level._player = new Player(0,0, "yellow", 12f, _level._paths.get(0));
 
     }
+
+    void endLevel(){
+        actLVL += 1;
+        _level._enemies.clear();
+        _level._paths.clear();
+        _level._coins.clear();
+    }
+    
     private Engine _engine;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private InputStreamReader reader;
     private JsonArray levels;
     private Level _level = new Level();
+
+    public float lifes = 10f;
+    public int actLVL = 0;
     class Level
     {
         public List<Path> _paths = new ArrayList<>();
