@@ -32,6 +32,7 @@ public class Path extends GameObject{
     public void addDirection(float x, float y){
         _directions.add(new Point(x, y));
     }
+    public void addNullDirection(){_directions.add(null);}
 
     public void automatizeDirections(){
         for (int i = 0; i < segments.size(); i++){

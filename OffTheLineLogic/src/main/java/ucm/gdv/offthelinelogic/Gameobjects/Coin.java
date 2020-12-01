@@ -39,12 +39,22 @@ public class Coin extends GameObject{
         else
             _angle += 80 * deltaTime;
 
+        if(initDeath){
+            //_radius += 1;
+            _size += 50 * (float)deltaTime;
+            deadCD += deltaTime;
+            if(deadCD >= 0.5f)
+                dead = true;
+        }
     }
+
 
     public void OnCollision(GameObject other){
         super.OnCollision(other);
         if(other._tag=="Player") _active=false;
     }
+
+    public void initDeath(){initDeath = true;}
 
     public void set_angle(float angle){
         _angle = angle;
@@ -56,9 +66,15 @@ public class Coin extends GameObject{
     {
         _radius = radius;
     }
+
+    public boolean isDead(){return dead;}
     float _speed;
     float _radius;
     float _angle;
 
     boolean _active=true;
+    boolean initDeath = false;
+    boolean dead = false;
+    float deadCD = 0f;
+    Player _pl;
 }

@@ -2,24 +2,6 @@ package ucm.gdv.offthelinelogic;
 
 public class Utils {
 
-    public static boolean segmentsIntersection(Segment s1, Segment s2){
-        Point p = null;
-        float s1_x, s1_y, s2_x, s2_y;
-        s1_x = s1.p2.x - s1.p1.x;     s1_y = s1.p2.y - s1.p1.y;
-        s2_x = s2.p2.x - s2.p1.x;     s2_y = s2.p2.y - s2.p1.y;
-
-        float s, t;
-        s = (-s1_y * (s1.p1.x - s2.p1.x) + s1_x * (s1.p1.y - s2.p1.y)) / (-s2_x * s1_y + s1_x * s2_y);
-        t = ( s2_x * (s1.p1.y - s2.p1.y) - s2_y * (s1.p1.y - s2.p1.y)) / (-s2_x * s1_y + s1_x * s2_y);
-
-        if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
-        {
-            // Collision detected
-            return true;
-        }
-        return false;
-    }
-
     static public boolean segmentCollition(Point a, Point b, Point c, Point d){
         Point v1 = new Point(b.x - a.x, b.y- a.y);
         Point v2 = new Point(d.x - c.x, d.y- c.y);
@@ -114,6 +96,12 @@ public class Utils {
         boolean b2 = p1.y == p2.y;
 
         return  b1 && b2;
+    }
+
+    public static Point multVector(Point p, float n){
+        Point np;
+        np = new Point(p.x * n, p.y *n);
+        return  np;
     }
 
     public static Point getNormal(Segment s, boolean counterclock){

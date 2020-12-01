@@ -58,7 +58,7 @@ public class Player extends GameObject {
 
             _actualSegment = _path.segments.get(_counter);
 
-            if(dirNum > 1)
+            if(dirNum > 0)
                 _dirSegment = Utils.normalize(_actualSegment);
             else
                 _dirSegment = Utils.normalize(_actualSegment.inverted());
@@ -82,8 +82,13 @@ public class Player extends GameObject {
     }
 
     public void jump(){
-        _dirSegment = Utils.getNormal(_actualSegment, dirNum < 1);
+        if(_path._directions.isEmpty())
+            _dirSegment = Utils.getNormal(_actualSegment, dirNum < 1);
+        else {
+            _dirSegment = Utils.multVector(_path._directions.get(_counter), dirNum);
+        }
         jumping = true;
+        _speed *= 3;
     }
 
     public Segment get_collisionSegment(){
@@ -96,7 +101,7 @@ public class Player extends GameObject {
         _path = pa;
         jumping = false;
         _counter = _path.segments.indexOf(s);
-        dirNum = -dirNum;
+            dirNum = -dirNum;
         if(dirNum < 1) {
             _dirSegment = Utils.normalize(_actualSegment.inverted());
             distToPoint = Utils.sqrDistancePointPoint(p, _actualSegment.p1);
@@ -107,6 +112,20 @@ public class Player extends GameObject {
         }
 
         distance = 0;
+        _speed /= 3;
+    }
+
+    public void playerDeath(Path pa){
+        _path = pa;
+        p = new Point(_path._vertex.get(0).x, _path._vertex.get(0).y);
+        _actualSegment = _path.segments.get(0);
+        _dirSegment = Utils.normalize(_actualSegment);
+        distToPoint = _actualSegment.getDistance();
+        distance = 0;
+        dirNum = 1;
+        jumping = false;
+        _counter = 0;
+        _speed /= 3;
     }
 
     private float _angle = 20f;
@@ -119,8 +138,6 @@ public class Player extends GameObject {
     private Segment _collisionSegment;
     private Path _path;
     public boolean jumping;
-    private boolean inverted = false;
     private int dirNum = 1;
-
     private int _counter = 0;
 }

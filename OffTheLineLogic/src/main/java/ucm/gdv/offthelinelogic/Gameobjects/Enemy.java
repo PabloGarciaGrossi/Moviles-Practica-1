@@ -97,6 +97,10 @@ public class Enemy extends GameObject {
         move = true;
     }
 
+    public  Segment get_segment(){
+        return _segment;
+    }
+
     public void set_time2(float t){
         _time2 = t;
     }
