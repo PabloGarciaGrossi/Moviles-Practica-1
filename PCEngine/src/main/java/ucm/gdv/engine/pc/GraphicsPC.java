@@ -38,8 +38,9 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             System.err.println("No pude crear la BufferStrategy");
             return;
         }
-
         _strategy = _window.getBufferStrategy();
+
+
     }
 
     public void render(Logic logic){
@@ -77,18 +78,19 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         FontPC baseFont =  new FontPC();
         String file = "Assets/Fonts/" + filename;
         try (InputStream is = new FileInputStream(file)) {
-            baseFont.font.createFont(java.awt.Font.TRUETYPE_FONT, is);
+            baseFont.font = baseFont.font.createFont(java.awt.Font.TRUETYPE_FONT, is);
+
+            if(isBold) baseFont.font.deriveFont(java.awt.Font.BOLD, size);
+            else baseFont.font.deriveFont(java.awt.Font.PLAIN, size);
+
+            _font = baseFont;
+
+            _graphics.setFont(_font.font);
         }
         catch (Exception e) {
             // Ouch. No está.
             System.err.println("Error cargando la fuente: " + e);
         }
-        if(isBold) baseFont.font.deriveFont(java.awt.Font.BOLD, size);
-        else baseFont.font.deriveFont(java.awt.Font.PLAIN, size);
-
-        _font = baseFont;
-
-        _graphics.setFont(_font.font);
 
         return baseFont;
     }

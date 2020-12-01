@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ucm.gdv.engine.Engine;
+import ucm.gdv.engine.Font;
 import ucm.gdv.engine.Input;
 import ucm.gdv.engine.Logic;
 import ucm.gdv.offthelinelogic.Gameobjects.Coin;
@@ -31,6 +32,7 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
+        Font f = _engine.getGraphics().newFont("Bangers-Regular.ttf", 32, false);
         loadLevel(actLVL);
     }
 
@@ -81,6 +83,7 @@ public class OffTheLineLogic implements Logic{
 
 
     public void render(){
+        _engine.getGraphics().drawText(_level.lvlName, 20, 20);
         for (GameObject o : _level.getGameobjects())
         {
             o.render(_engine);
@@ -182,6 +185,8 @@ public class OffTheLineLogic implements Logic{
 
         JsonObject levelread = (JsonObject)levelsArray.get(level);
 
+        String name = levelread.get("name").toString();
+        _level.lvlName = Integer.toString(level) + " " + name;
         //Loading paths #####################################################
         JsonArray paths = (JsonArray) levelread.get("paths");
         for (int j = 0; j < paths.size(); j++) {
@@ -312,6 +317,7 @@ public class OffTheLineLogic implements Logic{
         public List<Coin> _coins = new ArrayList<>();
         public List <Enemy> _enemies = new ArrayList<>();
         public Player _player;
+        public String lvlName;
 
         public List<GameObject> getGameobjects(){
             List<GameObject> l = new ArrayList<>();
