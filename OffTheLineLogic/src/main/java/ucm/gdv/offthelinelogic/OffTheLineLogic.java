@@ -31,13 +31,34 @@ public class OffTheLineLogic implements Logic{
         } catch(Exception exc){
             System.err.println("Error cargando los niveles: " + e);
         }
-        loadLevel(16);
+        loadLevel(1);
     }
 
     public void update(double deltaTime){
         for (GameObject o : _level.getGameobjects())
         {
             o.update(deltaTime);
+        }
+        if(_level._player.jumping){
+            int i = 0;
+            boolean found = false;
+            while (!found && i < _level._paths.size())
+            {
+                int j = 0;
+                while(!found && j < _level._paths.get(i).getSegments().size()) {
+                    Segment col = _level._player.get_collisionSegment();
+                    if (pathCollision(col, _level._paths.get(i).getSegments().get(j))) {
+                        Segment s = _level._paths.get(i).getSegments().get(j);
+                        if(s != _level._player.get_actualSegment()) {
+                            Path p = _level._paths.get(i);
+                            _level._player.setNewDirSegment(s, p);
+                            found = true;
+                        }
+                    }
+                    j++;
+                }
+                i++;
+            }
         }
     }
 
@@ -53,11 +74,31 @@ public class OffTheLineLogic implements Logic{
     public void handleInput(){
             for (Input.TouchEvent t : _engine.getInput().getTouchEvents()) {
                 if (t.typeEvent == Input.type.PULSAR) {
-                    System.out.println("mi polla con cebolla");
+                    if(!_level._player.jumping)
+                        _level._player.jump();
                 }
             }
     }
 
+    public boolean pathCollision(Segment s1, Segment s2){
+        return Utils.segmentCollition(s1.p1, s1.p2, s2.p1, s2.p2);
+    }
+
+    /*public List<Segment> possiblePathCollision(){
+        List<Segment> l = new ArrayList<Segment>();
+        Segment direction = _level._player.getLongDirection();
+        for(int i = 0; i < _level._paths.size(); i++)
+        {
+            for (int j = 0; j < _level._paths.get(i).getSegments().size(); j++)
+            {
+                if(pathCollision(direction, _level._paths.get(i).getSegments().get(j)))
+                {
+                    l.add(_level._paths.get(i).getSegments().get(j));
+                }
+            }
+        }
+        return l;
+    }*/
     public void loadLevel(int level){
         JsonArray levelsArray = (JsonArray) levels.get(0);
         //System.out.println(levelsArray);
@@ -79,11 +120,23 @@ public class OffTheLineLogic implements Logic{
                 p.addVertex(x.floatValue(), y.floatValue());
             }
 
+            p.createSegments();
+
             //Comprobamos que vengan indicadas las direcciones
             if ((JsonArray) vertex.get("directions") != null) {
+                JsonArray dirs = (JsonArray) vertex.get("directions");
+                for (int i = 0; i < _v.size(); i++) {
+                    JsonObject actualDir = (JsonObject) dirs.get(i);
 
+                    BigDecimal x = (BigDecimal) actualDir.get("x");
+                    BigDecimal y = (BigDecimal) actualDir.get("y");
+
+                    p.addDirection(x.floatValue(), y.floatValue());
+                }
             }
-            p.createDirections();
+            else{
+                p.automatizeDirections();
+            }
             _level._paths.add(p);
         }
         // ################################################################
@@ -130,7 +183,7 @@ public class OffTheLineLogic implements Logic{
 
                 Enemy e = new Enemy(x.floatValue(), y.floatValue(), l.floatValue(),"red");
 
-                BigDecimal speedBD, angleBD, offset1, offset2, time1 = null;
+                BigDecimal speedBD, angleBD, offset1, offset2, time1, time2 = null;
                 if(actualEnemy.get("speed") != null) {
                     speedBD = (BigDecimal) actualEnemy.get("speed");
                     e.set_speed(speedBD.floatValue());
@@ -147,6 +200,9 @@ public class OffTheLineLogic implements Logic{
 
                     time1 = (BigDecimal) actualEnemy.get("time1");
                     e.set_time1(time1.floatValue());
+
+                    time2 = (BigDecimal) actualEnemy.get("time2");
+                    e.set_time2(time2.floatValue());
                 }
                 _level._enemies.add(e);
             }

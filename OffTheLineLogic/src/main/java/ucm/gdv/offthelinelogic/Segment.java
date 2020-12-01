@@ -11,6 +11,7 @@ public class Segment {
     {
         return Utils.sqrDistancePointPoint(p2, p1);
     }
+    public Segment inverted(){return new Segment(p1,p2);}
     public Point p1;
     public Point p2;
 }

@@ -2,7 +2,7 @@ package ucm.gdv.offthelinelogic;
 
 public class Utils {
 
-    public static Point segmentsIntersection(Segment s1, Segment s2){
+    public static boolean segmentsIntersection(Segment s1, Segment s2){
         Point p = null;
         float s1_x, s1_y, s2_x, s2_y;
         s1_x = s1.p2.x - s1.p1.x;     s1_y = s1.p2.y - s1.p1.y;
@@ -15,10 +15,54 @@ public class Utils {
         if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
         {
             // Collision detected
-            p.x = s1.p1.x + (t * s1_x);
-            p.y = s1.p1.y + (t * s1_y);
+            return true;
         }
-        return p;
+        return false;
+    }
+
+    static public boolean segmentCollition(Point a, Point b, Point c, Point d){
+        Point v1 = new Point(b.x - a.x, b.y- a.y);
+        Point v2 = new Point(d.x - c.x, d.y- c.y);
+         /*if(v1.x_ == 0)
+             v1.x_ = 0.0001f;*/
+
+       /* if((v1.x*v2.y) == (v1.y*v2.x)) {
+            System.out.println("Paralelas");
+            return false;
+        }*/
+
+        float s = (c.y - a.y)*v2.x*v1.x + a.x*v1.y*v2.x-c.x*v2.y*v1.x;
+        float x = (s)/(v1.y*v2.x - v2.y*v1.x);
+        float y;
+        if(v1.x == 0) {
+            y = ((x * v2.y - c.x * v2.y) / v2.x) + c.y;
+        }
+        else {
+            y = ((x * v1.y - a.x * v1.y) / v1.x) + a.y;
+        }
+
+        if(x > 2000 || x < -2000 || y > 2000 || y < -2000) {
+            return false;
+        }
+
+        //System.out.println("Coordenadas de corte x: " + x + " y: " + y);
+        Point corte = new Point(x, y);
+
+        if(areEqual(corte, a, 0.005f) || areEqual(corte, b, 0.005f) || areEqual(corte, c, 0.005f) || areEqual(corte, d, 0.005f)) {
+            return false;
+        }
+        if(insideSegment(corte, a, b) && insideSegment( corte, c, d)){
+            return true;
+        }
+
+        return false;
+    }
+
+    static boolean insideSegment(Point p, Point a, Point b){
+        Point v1 = new Point(b.x - a.x, b.y- a.y);
+        Point v2 = new Point(b.x - p.x, b.y- p.y);
+
+        return vectorDistance(v1) > vectorDistance(v2) && v1.x*v2.x >= 0 && v1.y*v2.y >= 0;
     }
 
     public static float sqrDistancePointSegment(Segment seg, Point p){
@@ -51,6 +95,11 @@ public class Utils {
         return d;
     }
 
+    public static float vectorDistance(Point p)
+    {
+        float a = (float) Math.sqrt((p.x * p.x)+ (p.y * p.y));
+        return a;
+    }
     public static Point normalize(Point d)
     {
         float a = (float) Math.sqrt(Math.abs((d.x * d.x)) + Math.abs((d.y * d.y)));
@@ -58,5 +107,19 @@ public class Utils {
         d.y = d.y/ a;
 
         return d;
+    }
+
+    public static boolean areEqual(Point p1, Point p2, float er){
+        boolean b1 = p1.x == p2.x;
+        boolean b2 = p1.y == p2.y;
+
+        return  b1 && b2;
+    }
+
+    public static Point getNormal(Segment s, boolean counterclock){
+        if(!counterclock)
+            return Utils.normalize(new Point((s.p2.y - s.p1.y), -(s.p2.x - s.p1.x)));
+        else
+            return Utils.normalize(new Point(-(s.p2.y - s.p1.y), (s.p2.x - s.p1.x)));
     }
 }
