@@ -27,8 +27,6 @@ public class Player extends GameObject {
         float s = (float) Math.sin(b);
         float c = (float) Math.cos(b);
 
-        Point segPOS=_path._vertex.get(0);
-        Point playerPOS=p;
         e.getGraphics().translate(p.x, p.y);
         e.getGraphics().rotate(_angle * dirNum);
         e.getGraphics().drawLine(- _size/2,  - _size/2,   + _size/2,  - _size/2);
@@ -42,8 +40,9 @@ public class Player extends GameObject {
         //_x+=_speed*deltaTime;
         _angle += 120 * deltaTime;
         Point prev = new Point(p.x, p.y);
-        float actSpeed=_speed;
-        if(jumping) actSpeed=_jumpingSpeed;
+
+        float actSpeed= (!jumping) ? _speed : _jumpingSpeed;
+
         p.x += _dirSegment.x * dirNum * actSpeed * (float) deltaTime;
         p.y += _dirSegment.y * dirNum * actSpeed * (float) deltaTime;
 
@@ -97,7 +96,6 @@ public class Player extends GameObject {
             _dirSegment = Utils.multVector(_path._directions.get(_counter), dirNum);
         }
         jumping = true;
-        _speed = 1000;
         distance = 0;
     }
 
@@ -123,7 +121,6 @@ public class Player extends GameObject {
         }
 
         distance = 0;
-        _speed = 250f;
     }
 
     public void playerDeath(Path pa){
@@ -136,7 +133,6 @@ public class Player extends GameObject {
         dirNum = 1;
         jumping = false;
         _counter = 0;
-        _speed = 250f;
     }
 
     private float _angle = 20f;

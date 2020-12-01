@@ -94,6 +94,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
                 break;
             case "white":
                 _colorRGBA = Color.WHITE;
+                break;
             default:
                 _colorRGBA = Color.BLACK;
                 break;
