@@ -139,7 +139,6 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void checkEnemyCollision(){
-        if(_level._player.jumping) {
             Segment col = _level._player.get_collisionSegment();
             int i = 0;
             boolean found = false;
@@ -150,7 +149,6 @@ public class OffTheLineLogic implements Logic{
                 }
                 i++;
             }
-        }
     }
 
     public void checkCoinCollision(){

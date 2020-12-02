@@ -105,7 +105,12 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
 
     public void scale (float x){
         Graphics2D _g = (Graphics2D) _graphics;
-        _g.scale(x, x);
+        _g.scale(x, -x);
+    }
+
+    public void scale (float x, float y){
+        Graphics2D _g = (Graphics2D) _graphics;
+        _g.scale(x, -y);
     }
 
     public void rotate(float angle){
@@ -164,8 +169,11 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
     }
 
     public void drawText(String text, float x, float y){
+        save();
+        scale(1, 1);
         _graphics.setFont(_font.font);
         _graphics.drawString(text, (int) x, (int) y);
+        restore();
     }
 
     public float getWidth(){
