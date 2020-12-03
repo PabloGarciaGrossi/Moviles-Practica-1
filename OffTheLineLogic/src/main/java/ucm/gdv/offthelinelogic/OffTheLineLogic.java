@@ -1,7 +1,5 @@
 package ucm.gdv.offthelinelogic;
 
-import java.io.FileDescriptor;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,11 +15,11 @@ import ucm.gdv.offthelinelogic.Gameobjects.Enemy;
 import ucm.gdv.offthelinelogic.Gameobjects.GameObject;
 import ucm.gdv.offthelinelogic.Gameobjects.Path;
 import ucm.gdv.offthelinelogic.Gameobjects.Player;
+import ucm.gdv.offthelinelogic.Gameobjects.UI;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import org.json.simple.parser.JSONParser;
 
 public class OffTheLineLogic implements Logic{
     public OffTheLineLogic(Engine e){
@@ -35,6 +33,7 @@ public class OffTheLineLogic implements Logic{
         }
         Font f = _engine.getGraphics().newFont("Bangers-Regular.ttf", 32, false);
         loadLevel(actLVL);
+        _level._info = new UI(50, 80, 10, false, lives);
 
         pila.push(_menu);
     }
@@ -83,7 +82,10 @@ public class OffTheLineLogic implements Logic{
 
     public void playerDeath(){
         _level._player.playerDeath(_level._paths.get(0));
-        lifes -= 1;
+        lives -= 1;
+        _level._info.lives = lives;
+        if(lives == 0)
+            pila.pop();
     }
 
     public void checkPlayerOutofBounds(){
@@ -292,7 +294,7 @@ public class OffTheLineLogic implements Logic{
     private Level _level = new Level();
     private Menu _menu = new Menu();
 
-    public float lifes = 10f;
+    public int lives = 10;
     public int actLVL = 0;
     public boolean working = true;
 
@@ -311,6 +313,7 @@ public class OffTheLineLogic implements Logic{
         public List <Enemy> _enemies = new ArrayList<>();
         public Player _player;
         public String lvlName;
+        public UI _info;
 
         public void update(double deltaTime){
             if(isWorking()) {
@@ -347,8 +350,15 @@ public class OffTheLineLogic implements Logic{
             l.addAll(_paths);
             l.addAll(_coins);
             l.addAll(_enemies);
+            l.add(_info);
             l.add(_player);
             return l;
+        }
+
+        public void clearLevel(){
+            _paths.clear();
+            _coins.clear();
+            _enemies.clear();
         }
     };
 
@@ -366,6 +376,11 @@ public class OffTheLineLogic implements Logic{
         public void handleInput(Engine e){
             for(Input.TouchEvent event: e.getInput().getTouchEvents()){
                 if(event.typeEvent==Input.type.PULSAR){
+                    lives = 10;
+                    _level._info.lives = lives;
+                    actLVL = 0;
+                    _level.clearLevel();
+                    loadLevel(0);
                     pila.push(_level);
                 }
             }
