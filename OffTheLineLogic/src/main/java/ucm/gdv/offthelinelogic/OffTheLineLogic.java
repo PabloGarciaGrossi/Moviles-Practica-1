@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import ucm.gdv.engine.Engine;
 import ucm.gdv.engine.Font;
@@ -34,6 +35,8 @@ public class OffTheLineLogic implements Logic{
         }
         Font f = _engine.getGraphics().newFont("Bangers-Regular.ttf", 32, false);
         loadLevel(actLVL);
+
+        pila.push(_menu);
     }
 
     private boolean AreColliding(GameObject o1, GameObject o2){
@@ -66,37 +69,16 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void update(double deltaTime){
-
-        if(isWorking()) {
-            for (GameObject o : _level.getGameobjects()) {
-                o.update(deltaTime);
-            }
-            checkEnemyCollision();
-            checkPathCollision();
-            checkCoinCollision();
-            removeCoins();
-
-            checkPlayerOutofBounds();
-            lvlFinished();
-        }
+        pila.peek().update(deltaTime);
     }
 
 
     public void render(){
-        _engine.getGraphics().setColor("White");
-        _engine.getGraphics().drawText(_level.lvlName, -300, 150);
-        for (GameObject o : _level.getGameobjects())
-        {
-            o.render(_engine);
-        }
-
+        pila.peek().render(_engine);
     }
 
     public void handleInput(){
-        for (GameObject o : _level.getGameobjects())
-        {
-            o.handleInput(_engine);
-        }
+        pila.peek().handleInput(_engine);
     }
 
     public void playerDeath(){
@@ -308,11 +290,21 @@ public class OffTheLineLogic implements Logic{
     private InputStreamReader reader;
     private JsonArray levels;
     private Level _level = new Level();
+    private Menu _menu = new Menu();
 
     public float lifes = 10f;
     public int actLVL = 0;
     public boolean working = true;
-    class Level
+
+    Stack<State> pila = new Stack<>();
+
+    interface State{
+        public void update(double deltaTime);
+        public void render(Engine e);
+        public void handleInput(Engine e);
+    }
+
+    class Level implements  State
     {
         public List<Path> _paths = new ArrayList<>();
         public List<Coin> _coins = new ArrayList<>();
@@ -320,6 +312,36 @@ public class OffTheLineLogic implements Logic{
         public Player _player;
         public String lvlName;
 
+        public void update(double deltaTime){
+            if(isWorking()) {
+                for (GameObject o : getGameobjects()) {
+                    o.update(deltaTime);
+                }
+                checkEnemyCollision();
+                checkPathCollision();
+                checkCoinCollision();
+                removeCoins();
+
+                checkPlayerOutofBounds();
+                lvlFinished();
+            }
+        }
+
+        public void render (Engine e){
+            e.getGraphics().setColor("White");
+            e.getGraphics().drawText(_level.lvlName, -300, -150);
+            for (GameObject o : getGameobjects())
+            {
+                o.render(e);
+            }
+        }
+
+        public void handleInput(Engine e){
+            for (GameObject o : getGameobjects())
+            {
+                o.handleInput(e);
+            }
+        }
         public List<GameObject> getGameobjects(){
             List<GameObject> l = new ArrayList<>();
             l.addAll(_paths);
@@ -329,5 +351,25 @@ public class OffTheLineLogic implements Logic{
             return l;
         }
     };
+
+    class Menu implements State{
+        public void update(double deltaTime){
+
+        }
+
+        public void render(Engine e){
+            e.getGraphics().setColor("White");
+            e.getGraphics().drawText("Bienvenido al menu", -130, 0);
+            e.getGraphics().drawText("Pulsa para empezar", -130, 100);
+        }
+
+        public void handleInput(Engine e){
+            for(Input.TouchEvent event: e.getInput().getTouchEvents()){
+                if(event.typeEvent==Input.type.PULSAR){
+                    pila.push(_level);
+                }
+            }
+        }
+    }
 
 }
