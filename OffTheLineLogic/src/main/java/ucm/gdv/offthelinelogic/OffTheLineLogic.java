@@ -148,7 +148,7 @@ public class OffTheLineLogic implements Logic{
 
     public void checkCoinCollision(){
         for (int m = 0; m < _level._coins.size(); m++){
-            if(Utils.sqrDistancePointPoint(_level._coins.get(m).getPos(), _level._player.getPos()) < 15f)
+            if(Utils.sqrDistancePointPoint(_level._coins.get(m).getPos(), _level._player.getPos()) < 22f)
             {
                 _level._coins.get(m).initDeath();
             }
