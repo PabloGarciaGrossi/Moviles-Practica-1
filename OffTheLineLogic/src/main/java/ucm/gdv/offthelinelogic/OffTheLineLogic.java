@@ -33,7 +33,7 @@ public class OffTheLineLogic implements Logic{
         }
         Font f = _engine.getGraphics().newFont("Bangers-Regular.ttf", 32, false);
         loadLevel(actLVL);
-        _level._info = new UI(50, 80, 10, false, lives);
+        _level._info = new UI(50, 170, 10, false, lives);
 
         pila.push(_menu);
     }
