@@ -2,16 +2,9 @@ package ucm.gdv.offthelinelogic;
 
 public class Utils {
 
-    static public boolean segmentCollition(Point a, Point b, Point c, Point d){
+    static public Point segmentCollition(Point a, Point b, Point c, Point d){
         Point v1 = new Point(b.x - a.x, b.y- a.y);
         Point v2 = new Point(d.x - c.x, d.y- c.y);
-         /*if(v1.x_ == 0)
-             v1.x_ = 0.0001f;*/
-
-       /* if((v1.x*v2.y) == (v1.y*v2.x)) {
-            System.out.println("Paralelas");
-            return false;
-        }*/
 
         float s = (c.y - a.y)*v2.x*v1.x + a.x*v1.y*v2.x-c.x*v2.y*v1.x;
         float x = (s)/(v1.y*v2.x - v2.y*v1.x);
@@ -24,20 +17,20 @@ public class Utils {
         }
 
         if(x > 2000 || x < -2000 || y > 2000 || y < -2000) {
-            return false;
+            return null;
         }
 
         //System.out.println("Coordenadas de corte x: " + x + " y: " + y);
         Point corte = new Point(x, y);
 
         if(areEqual(corte, a, 0.005f) || areEqual(corte, b, 0.005f) || areEqual(corte, c, 0.005f) || areEqual(corte, d, 0.005f)) {
-            return false;
+            return null;
         }
         if(insideSegment(corte, a, b) && insideSegment( corte, c, d)){
-            return true;
+            return corte;
         }
 
-        return false;
+        return null;
     }
 
     static boolean insideSegment(Point p, Point a, Point b){

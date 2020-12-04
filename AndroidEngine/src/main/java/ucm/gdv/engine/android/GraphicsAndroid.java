@@ -69,10 +69,6 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         canvas_.scale(-x, x);
     };
 
-    public void scale (float x, float y){
-            canvas_.scale(-x, y);
-    }
-
     public void rotate(float angle){
         canvas_.rotate(angle);
     };
@@ -124,7 +120,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
 
     public void drawText(String text, float x, float y){
         save();
-        scale(-1, -1);
+        scale(-1);
         canvas_.drawText(text, (int)x, (int)y, _paint);
         restore();
     };

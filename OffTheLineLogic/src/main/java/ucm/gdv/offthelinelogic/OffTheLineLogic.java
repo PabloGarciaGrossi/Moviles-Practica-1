@@ -68,7 +68,10 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void update(double deltaTime){
+        long Starttime = System.nanoTime();
         pila.peek().update(deltaTime);
+        mediumTime += System.nanoTime() - Starttime;
+        iterations += 1;
     }
 
 
@@ -81,7 +84,8 @@ public class OffTheLineLogic implements Logic{
     }
 
     public void playerDeath(){
-        _level._player.playerDeath(_level._paths.get(0));
+        endLevel();
+        loadLevel(actLVL);
         lives -= 1;
         _level._info.lives = lives;
         if(lives == 0)
@@ -95,7 +99,7 @@ public class OffTheLineLogic implements Logic{
                 _level._player.getPos().y <  -_engine.getGraphics().getHeight()/2)
             playerDeath();
     }
-    public boolean pathCollision(Segment s1, Segment s2){
+    public Point pathCollision(Segment s1, Segment s2){
         return Utils.segmentCollition(s1.p1, s1.p2, s2.p1, s2.p2);
     }
 
@@ -107,11 +111,13 @@ public class OffTheLineLogic implements Logic{
             while (!found && i < _level._paths.size()) {
                 int j = 0;
                 while (!found && j < _level._paths.get(i).getSegments().size()) {
-                    if (pathCollision(col, _level._paths.get(i).getSegments().get(j)) && _level._player.getDistance() > 5f) {
+                    Point corte = pathCollision(col, _level._paths.get(i).getSegments().get(j));
+                    if (corte != null && _level._player.getDistance() > 5f) {
                         Segment s = _level._paths.get(i).getSegments().get(j);
                         if (s != _level._player.get_actualSegment()) {
                             Path p = _level._paths.get(i);
                             _level._player.setNewDirSegment(s, p);
+                            _level._player.setPos(corte);
                             found = true;
                         }
                     }
@@ -119,6 +125,11 @@ public class OffTheLineLogic implements Logic{
                 }
                 i++;
             }
+             /*while (!found && i < _level._paths.size()) {
+                collisionThread nt = new collisionThread();
+                nt.run(i, col, found);
+                i++;
+            }*/
         }
     }
 
@@ -127,7 +138,7 @@ public class OffTheLineLogic implements Logic{
             int i = 0;
             boolean found = false;
             while (!found && i < _level._enemies.size()) {
-                if (pathCollision(col, _level._enemies.get(i).get_segment())) {
+                if (pathCollision(col, _level._enemies.get(i).get_segment()) != null) {
                     playerDeath();
                     found = true;
                 }
@@ -161,6 +172,9 @@ public class OffTheLineLogic implements Logic{
             else {
                 endLevel();
                 loadLevel(actLVL);
+                System.out.println((mediumTime/iterations)* 10e-9);
+                mediumTime = 0;
+                iterations = 0;
             }
         }
     }
@@ -297,6 +311,8 @@ public class OffTheLineLogic implements Logic{
     public int lives = 10;
     public int actLVL = 0;
     public boolean working = true;
+    long mediumTime = 0;
+    int iterations = 0;
 
     Stack<State> pila = new Stack<>();
 

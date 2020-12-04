@@ -66,12 +66,18 @@ public class Player extends GameObject {
 
             _actualSegment = _path.segments.get(_counter);
 
-            if(dirNum > 0)
+            if(dirNum > 0) {
                 _dirSegment = Utils.normalize(_actualSegment);
-            else
+                p.x = _actualSegment.p1.x;
+                p.y = _actualSegment.p1.y;
+            }
+            else {
                 _dirSegment = Utils.normalize(_actualSegment.inverted());
-            distToPoint = _actualSegment.getDistance();
-            distance = 0;
+                p.x = _actualSegment.p2.x;
+                p.y = _actualSegment.p2.y;
+            }
+                distToPoint = _actualSegment.getDistance();
+                distance = 0;
         }
 
     }

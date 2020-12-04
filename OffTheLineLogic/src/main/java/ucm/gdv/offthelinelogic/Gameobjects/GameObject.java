@@ -21,6 +21,8 @@ public class GameObject {
 
     public Point getPos(){return p;}
 
+    public void setPos(Point pos){p = pos;}
+
     public float getSize(){return _size;}
 
     Point p;
