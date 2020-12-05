@@ -10,21 +10,26 @@ import ucm.gdv.engine.Engine;
 import ucm.gdv.engine.Font;
 import ucm.gdv.engine.Input;
 import ucm.gdv.engine.Logic;
+import ucm.gdv.offthelinelogic.Gameobjects.Callback;
 import ucm.gdv.offthelinelogic.Gameobjects.Coin;
 import ucm.gdv.offthelinelogic.Gameobjects.Enemy;
 import ucm.gdv.offthelinelogic.Gameobjects.GameObject;
 import ucm.gdv.offthelinelogic.Gameobjects.Path;
 import ucm.gdv.offthelinelogic.Gameobjects.Player;
+import ucm.gdv.offthelinelogic.Gameobjects.TextButton;
 import ucm.gdv.offthelinelogic.Gameobjects.UI;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
+import javax.xml.soap.Text;
+
+
 public class OffTheLineLogic implements Logic{
+    boolean hardMode=false;
     public OffTheLineLogic(Engine e){
         _engine = e;
-        //gameObjects.add(new Square(0,0, 40, "blue", 10));
         try{
             reader = new InputStreamReader(_engine.openInputStream("levels.json"));
             levels = Jsoner.deserializeMany(reader);
@@ -33,7 +38,7 @@ public class OffTheLineLogic implements Logic{
         }
         Font f = _engine.getGraphics().newFont("Bangers-Regular.ttf", 32, false);
         loadLevel(actLVL);
-        _level._info = new UI(50, 170, 10, false, lives);
+        _level._info = new UI(50, 170, 10, hardMode, lives);
 
         pila.push(_menu);
     }
@@ -191,7 +196,7 @@ public class OffTheLineLogic implements Logic{
         for (int j = 0; j < paths.size(); j++) {
             JsonObject vertex = (JsonObject) paths.get(j);
             JsonArray _v = (JsonArray) vertex.get("vertices");
-            Path p = new Path("blue");
+            Path p = new Path(0xFFFFFFFF);
             for (int i = 0; i < _v.size(); i++) {
                 JsonObject actualVertex = (JsonObject) _v.get(i);
 
@@ -229,7 +234,7 @@ public class OffTheLineLogic implements Logic{
             BigDecimal x = (BigDecimal) actualItem.get("x");
             BigDecimal y = (BigDecimal) actualItem.get("y");
 
-            Coin nCoin = new Coin(x.floatValue(), y.floatValue(), "yellow", 14f);
+            Coin nCoin = new Coin(x.floatValue(), y.floatValue(), 0xFFFFFF00, 14f);
 
             BigDecimal speedBD, angleBD, radiusBD = null;
             if(actualItem.get("speed") != null) {
@@ -257,7 +262,7 @@ public class OffTheLineLogic implements Logic{
                 BigDecimal l = (BigDecimal) actualEnemy.get("length");
 
 
-                Enemy e = new Enemy(x.floatValue(), y.floatValue(), l.floatValue(),"red");
+                Enemy e = new Enemy(x.floatValue(), y.floatValue(), l.floatValue(),0xFFFF0000);
 
                 BigDecimal speedBD, angleBD, offset1, offset2, time1, time2 = null;
                 if(actualEnemy.get("speed") != null) {
@@ -286,8 +291,9 @@ public class OffTheLineLogic implements Logic{
             System.out.println("No hay enemigos en este nivel");
         }
         //################################################################
-
-        _level._player = new Player(0,0, "white", 12f, _level._paths.get(0));
+        float speed=250f;
+        if(hardMode) speed = 400f;
+        _level._player = new Player(0,0, 0xFF1E90FF, 12f, _level._paths.get(0), speed);
 
     }
 
@@ -347,7 +353,7 @@ public class OffTheLineLogic implements Logic{
         }
 
         public void render (Engine e){
-            e.getGraphics().setColor("White");
+            e.getGraphics().setColor(0xFFFFFFFF);
             e.getGraphics().drawText(_level.lvlName, -300, -150);
             for (GameObject o : getGameobjects())
             {
@@ -360,6 +366,7 @@ public class OffTheLineLogic implements Logic{
             {
                 o.handleInput(e);
             }
+            e.getInput().clearEvents();
         }
         public List<GameObject> getGameobjects(){
             List<GameObject> l = new ArrayList<>();
@@ -378,28 +385,55 @@ public class OffTheLineLogic implements Logic{
         }
     };
 
+    class easyModeCallback implements Callback{
+        public void callfunction(){
+            lives = 10;
+            _level._info.lives = lives;
+            actLVL = 0;
+            _level.clearLevel();
+            hardMode = false;
+            loadLevel(0);
+            _level._info = new UI(50, 170, 10, hardMode, lives);
+            pila.push(_level);
+        }
+    }
+
+    class hardModeCallback implements Callback{
+        public void callfunction(){
+            lives = 5;
+            _level._info.lives = lives;
+            actLVL = 0;
+            _level.clearLevel();
+            hardMode = true;
+            loadLevel(0);
+            _level._info = new UI(50, 170, 10, hardMode, lives);
+            pila.push(_level);
+        }
+    }
+
     class Menu implements State{
+        TextButton easyModeButton;
+        TextButton hardModeButton;
+        public Menu(){
+            easyModeButton = new TextButton(-200, 50, 0, 0xFFFFFFFF, 100, 50, "EASY MODE",  new easyModeCallback());
+            hardModeButton = new TextButton(-200, 100, 0, 0xFFFFFFFF, 100, 50, "HARD MODE", new hardModeCallback());
+        }
         public void update(double deltaTime){
 
         }
 
         public void render(Engine e){
-            e.getGraphics().setColor("White");
-            e.getGraphics().drawText("Bienvenido al menu", -130, 0);
-            e.getGraphics().drawText("Pulsa para empezar", -130, 100);
+            e.getGraphics().setColor(0xFF1E90FF);
+            e.getGraphics().drawText("OFF THE LINE", -250, -100);
+            e.getGraphics().drawText("A GAME COPIED TO BRYAN PERFETTO", -250, -50);
+            easyModeButton.render(e);
+            hardModeButton.render(e);
         }
 
         public void handleInput(Engine e){
-            for(Input.TouchEvent event: e.getInput().getTouchEvents()){
-                if(event.typeEvent==Input.type.PULSAR){
-                    lives = 10;
-                    _level._info.lives = lives;
-                    actLVL = 0;
-                    _level.clearLevel();
-                    loadLevel(0);
-                    pila.push(_level);
-                }
-            }
+            easyModeButton.handleInput(e);
+            hardModeButton.handleInput(e);
+            e.getInput().clearEvents();
         }
     }
 

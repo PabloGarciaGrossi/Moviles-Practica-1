@@ -77,7 +77,8 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
             ;
         long lastFrameTime = System.nanoTime();
         // Bucle principal.
-        while(_running) {
+        boolean gameRunning=true;
+        while(_running && gameRunning) {
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
@@ -85,7 +86,7 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
             _logic.update(elapsedTime);
             _g.render(_logic);
             _logic.handleInput();
-            _running = _logic.isWorking();
+            gameRunning = _logic.isWorking();
         }
     };
 

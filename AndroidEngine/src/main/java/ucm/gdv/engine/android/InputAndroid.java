@@ -22,8 +22,12 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e= new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.PULSAR;
-                    e.posx = (int)event.getX();
-                    e.posy=(int)event.getY();
+                    float x = event.getX();
+                    float y = event.getY();
+                    float w=_view.getWidth();
+                    float h=_view.getHeight();
+                    e.posx = (int)((event.getX() - _view.getWidth()/2) * 1/calculateScale());
+                    e.posy = (int)((event.getY() - _view.getHeight()/2) * 1/calculateScale());
                     events.add(e);
                     return true;
                 }
@@ -31,8 +35,8 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e= new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.SOLTAR;
-                    e.posx = (int)event.getX();
-                    e.posy=(int)event.getY();
+                    e.posx = (int)(event.getX() * calculateScale() + _view.getWidth()/2);
+                    e.posy = (int)(event.getY() * calculateScale() + _view.getHeight()/2);
                     events.add(e);
                     return true;
                 }
@@ -40,8 +44,8 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e = new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.DESPLAZAR;
-                    e.posx = (int)event.getX();
-                    e.posy=(int)event.getY();
+                    e.posx = (int)(event.getX() * calculateScale() + _view.getWidth()/2);
+                    e.posy = (int)(event.getY() * calculateScale() + _view.getHeight()/2);
                     events.add(e);
                     return true;
                 }
@@ -51,9 +55,24 @@ public class InputAndroid implements ucm.gdv.engine.Input{
     }
     public List<TouchEvent> getTouchEvents(){
         List<TouchEvent> ret = new ArrayList<TouchEvent>(events);
-        events.clear();
         return ret;
     }
+
+    public void clearEvents() {
+        events.clear();
+    }
+
+    public float calculateScale(){
+        float s1 = 0;
+        float s2 = 0;
+        s1 = _view.getWidth() / _logicW;
+        s2 = _view.getHeight() / _logicH;
+        if (s1 < s2)
+            return s1;
+        else return s2;
+    };
     SurfaceView _view;
+    private float _logicW = 640;
+    private float _logicH = 480;
     ArrayList<TouchEvent> events;
 }

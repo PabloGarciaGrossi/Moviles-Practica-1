@@ -3,7 +3,7 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import ucm.gdv.engine.Engine;
 
 public class Coin extends GameObject{
-    public Coin(float x, float y, String color,float size){
+    public Coin(float x, float y, int color,float size){
         super(x,y,size,color);
         _tag = "Coin";
     }

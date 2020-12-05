@@ -9,7 +9,7 @@ import ucm.gdv.offthelinelogic.Segment;
 import ucm.gdv.offthelinelogic.Utils;
 
 public class Path extends GameObject{
-    public Path(String color)
+    public Path(int color)
     {
         super(0,0,0,color);
     }

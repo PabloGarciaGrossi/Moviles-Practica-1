@@ -1,7 +1,11 @@
 package ucm.gdv.androidgame;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.SurfaceView;
 
 import ucm.gdv.engine.android.EngineAndroid;
@@ -14,10 +18,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         _surface = new SurfaceView(this);
         _engine = new EngineAndroid(_surface, getAssets());
         _engine.init();
-        _logic = new OffTheLineLogic(_engine);
+
+        if(savedInstanceState==null) {
+            _logic = new OffTheLineLogic(_engine);
+        }
+        else {
+            _logic = new OffTheLineLogic(_engine);
+        }
         _engine.setLogic(_logic);
         setContentView(_engine.getSurfaceView());
     }
@@ -28,5 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         _engine.on_pause();
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

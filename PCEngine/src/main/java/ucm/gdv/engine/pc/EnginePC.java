@@ -34,7 +34,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
     {
         jf = new JFrame("Jframe");
         g = new GraphicsPC(jf,640,480);
-        input = new InputPC();
+        input = new InputPC(jf);
     }
 
     public void run(){

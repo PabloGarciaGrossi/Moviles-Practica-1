@@ -5,7 +5,7 @@ public interface Graphics {
 
     public Font newFont(String filename, int size, Boolean isBold);
 
-    public void clear (String color);
+    public void clear (int color);
 
     public void translate(float x, float y);
 
@@ -17,7 +17,7 @@ public interface Graphics {
 
     public void restore();
 
-    public void setColor(String color);
+    public void setColor(int color);
 
     public void drawLine(float x1, float y1, float x2, float y2);
 

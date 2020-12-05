@@ -47,7 +47,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         while(!_holder.getSurface().isValid())
             ;
         canvas_ = _holder.lockCanvas();
-        clear("Black");
+        clear(0xFF000000);
         save();
         translate(getWidth()/2, getHeight()/2);
         scale(calculateScale());
@@ -56,7 +56,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         _holder.unlockCanvasAndPost(canvas_);
     }
 
-    public void clear (String color){
+    public void clear (int color){
         setColor(color);
         fillRect(0, 0, (int)getWidth(), (int)getHeight());
     };
@@ -81,27 +81,8 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         canvas_.restore();
     };
 
-    public void setColor(String color){
-        color = color.toLowerCase();
-        int _colorRGBA;
-        switch(color){
-            case "red":
-                _colorRGBA = Color.RED;
-                break;
-            case "yellow":
-                _colorRGBA = Color.YELLOW;
-                break;
-            case "blue":
-                _colorRGBA = Color.BLUE;
-                break;
-            case "white":
-                _colorRGBA = Color.WHITE;
-                break;
-            default:
-                _colorRGBA = Color.BLACK;
-                break;
-        }
-        _paint.setColor(_colorRGBA);
+    public void setColor(int color){
+        _paint.setColor(color);
     };
 
     public void drawLine(float x1, float y1, float x2, float y2){

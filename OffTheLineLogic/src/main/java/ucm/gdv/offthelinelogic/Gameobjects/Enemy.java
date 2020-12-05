@@ -8,7 +8,7 @@ import ucm.gdv.offthelinelogic.Segment;
 import ucm.gdv.offthelinelogic.Utils;
 
 public class Enemy extends GameObject {
-    public Enemy(float x, float y, float size, String color){
+    public Enemy(float x, float y, float size, int color){
         super(x,y,size,color);
         _segment = new Segment(new Point(x-size/2, y), new Point(x+_size/2, y));
         _tag="Enemy";

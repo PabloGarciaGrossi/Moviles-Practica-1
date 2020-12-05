@@ -48,7 +48,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             do {
                 _graphics = _strategy.getDrawGraphics();
                 try {
-                    clear("black");
+                    clear(0xFF000000);
                     //Dibujar cosas
                     save();
                     translate(getWidth()/2, getHeight()/2);
@@ -93,7 +93,7 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         return baseFont;
     }
 
-    public void clear (String color){
+    public void clear (int color){
         setColor(color);
         fillRect(0, 0,(int) getWidth(),(int) getHeight());
     }
@@ -137,27 +137,10 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
             return s1;
         else return s2;
     }
-    public void setColor(String color){
-        color = color.toLowerCase();
+    public void setColor(int color){
+        Color c = new Color(color, true);
 
-        switch(color){
-            case "red":
-                _colorbg = Color.red;
-                break;
-            case "yellow":
-                _colorbg = Color.yellow;
-                break;
-            case "blue":
-                _colorbg = Color.blue;
-                break;
-            case "white":
-                _colorbg = Color.white;
-                break;
-            default:
-                _colorbg = Color.black;
-                break;
-        }
-        _graphics.setColor(_colorbg);
+        _graphics.setColor(c);
     }
 
     public void drawLine(float x1, float y1, float x2, float y2){

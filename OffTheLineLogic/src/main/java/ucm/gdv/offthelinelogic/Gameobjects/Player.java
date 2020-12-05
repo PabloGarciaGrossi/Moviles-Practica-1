@@ -9,7 +9,7 @@ import ucm.gdv.offthelinelogic.Segment;
 import ucm.gdv.offthelinelogic.Utils;
 
 public class Player extends GameObject {
-    public Player(float x, float y, String color, float size, Path path){
+    public Player(float x, float y, int color, float size, Path path, float speed){
         super(x,y,size,color);
         _path = path;
         p.x = _path._vertex.get(0).x;
@@ -18,6 +18,7 @@ public class Player extends GameObject {
         _dirSegment = Utils.normalize(_actualSegment);
         distToPoint = _actualSegment.getDistance();
         _tag = "Player";
+        _speed=speed;
     }
 
     public void render(Engine e) {
@@ -86,6 +87,7 @@ public class Player extends GameObject {
         for(Input.TouchEvent event: e.getInput().getTouchEvents()){
             if(event.typeEvent==Input.type.PULSAR){
                 if(!jumping) jump();
+                e.getInput().clearEvents();
             }
         }
     }
@@ -142,7 +144,7 @@ public class Player extends GameObject {
     }
 
     private float _angle = 20f;
-    private float _speed = 250f;
+    private float _speed;
     private float _jumpingSpeed = 1500f;
     private float distance = 0f;
     private float distToPoint = 0;
