@@ -12,8 +12,12 @@ import ucm.gdv.engine.Input;
 
 public class InputPC implements ucm.gdv.engine.Input {
 
+    //Controlador del mouse
     public class MouseHandler implements MouseListener {
         @Override
+
+        //Detecta que el ratón ha sido pulsado y añade un nuevo evento PULSAR a la lisat de eventos
+        //Este evento guarda la posición en la que se ha realizado el click
         public void mouseClicked(MouseEvent mouseEvent) {
             Input.TouchEvent t = new Input.TouchEvent();
             t.typeEvent = Input.type.PULSAR;
@@ -34,6 +38,7 @@ public class InputPC implements ucm.gdv.engine.Input {
             events.add(t);
         }
 
+        /*Posibles futuras implementaciones para el control del ratón*/
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
 
@@ -55,12 +60,14 @@ public class InputPC implements ucm.gdv.engine.Input {
         }
     }
 
+    //Inicialización del input, con su Jframe y su MouseHandler
     public InputPC(JFrame window){
         _window = window;
         ml = new MouseHandler();
         events = new ArrayList<TouchEvent>();
     }
 
+    //Devuelve una copia de los eventos almacenados y limpia la lista anterior
     public List<TouchEvent> getTouchEvents(){
         List<TouchEvent> ret = new ArrayList<TouchEvent>(events);
         events.clear();
@@ -71,6 +78,7 @@ public class InputPC implements ucm.gdv.engine.Input {
         return ml;
     }
 
+    //Calcula la escala de la pantalla para comprobar dónde se está realizando realmente el click del ratón
     public float calculateScale(){
         float s1 = 0;
         float s2 = 0;

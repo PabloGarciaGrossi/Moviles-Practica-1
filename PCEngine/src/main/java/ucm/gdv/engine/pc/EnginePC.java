@@ -18,6 +18,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
         return input;
     }
 
+    //Abre un InputStream en al carpeta de lectura del PC
     public InputStream openInputStream(String filename){
         InputStream is = null;
         try{
@@ -30,6 +31,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
         return is;
     }
 
+    //Inicialización del Jframe, los gráficos del PC y del input. A ellos se les pasa el Jframe para sus correspondientes operaciones
     public void init()
     {
         jf = new JFrame("Jframe");
@@ -37,18 +39,24 @@ public class EnginePC implements ucm.gdv.engine.Engine {
         input = new InputPC(jf);
     }
 
+    //Bucle principal del juego
     public void run(){
         long lastFrameTime = System.nanoTime();
+        //Registra al ratón del inputmanager para recibir los eventos de ratón
         jf.addMouseListener(input.getMl());
         boolean working = true;
         while(working) {
             if(logic!=null) {
+                //cálculo del deltaTime
                 long currentTime = System.nanoTime();
                 long nanoElapsedTime = currentTime - lastFrameTime;
                 lastFrameTime = currentTime;
                 double deltaTime = (double) nanoElapsedTime / 1.0E9;
+                //Llamada al renderizado de la lógica a través de los gráficos
                 g.render(logic);
+                //update de la lógica
                 logic.update(deltaTime);
+                //input de la lógica
                 logic.handleInput();
             }
         }
