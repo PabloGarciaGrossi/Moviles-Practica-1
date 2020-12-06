@@ -3,6 +3,7 @@ package ucm.gdv.offthelinelogic.Gameobjects;
 import ucm.gdv.engine.Engine;
 import ucm.gdv.offthelinelogic.Point;
 
+
 public class GameObject {
     public GameObject(float x, float y, float size, int color)
     {
@@ -15,8 +16,6 @@ public class GameObject {
     };
     public void update (double deltaTime){};
 
-    public void OnCollision(GameObject other){};
-
     public void handleInput(Engine e){};
 
     public Point getPos(){return p;}
@@ -28,5 +27,4 @@ public class GameObject {
     Point p;
     float _size;
     int _color;
-    String _tag;
 }

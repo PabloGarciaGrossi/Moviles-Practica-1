@@ -55,11 +55,8 @@ public class InputAndroid implements ucm.gdv.engine.Input{
     }
     public List<TouchEvent> getTouchEvents(){
         List<TouchEvent> ret = new ArrayList<TouchEvent>(events);
-        return ret;
-    }
-
-    public void clearEvents() {
         events.clear();
+        return ret;
     }
 
     public float calculateScale(){

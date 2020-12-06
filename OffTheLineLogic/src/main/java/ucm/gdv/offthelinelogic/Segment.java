@@ -7,11 +7,13 @@ public class Segment {
         p2 = p2_;
     }
 
+    //Devuleve la distancia del segmento
     public float getDistance()
     {
         return Utils.sqrDistancePointPoint(p2, p1);
     }
-    public Segment inverted(){return new Segment(p1,p2);}
+
+    //Los dos puntos que conforman dicho segmento
     public Point p1;
     public Point p2;
 }

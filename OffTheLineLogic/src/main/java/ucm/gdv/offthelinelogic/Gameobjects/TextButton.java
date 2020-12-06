@@ -33,7 +33,6 @@ public class TextButton extends GameObject{
                     if (event.posx >= p.x - w / 2 && event.posx <= p.x + w / 2) {
                         if(event.posy >= p.y - h / 2 && event.posy <= p.y + h / 2){
                             _callback.callfunction();
-                            e.getInput().clearEvents();
                         }
                     }
                 }

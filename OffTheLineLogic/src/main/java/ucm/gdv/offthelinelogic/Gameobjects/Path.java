@@ -14,6 +14,7 @@ public class Path extends GameObject{
         super(0,0,0,color);
     }
 
+    //Renderizado del path, se dibuja una línea entre cada uno de los vértices que lo conforman
     public void render (Engine e){
         e.getGraphics().setColor(_color);
         for (int i = 0; i < _vertex.size() - 1; i++) {
@@ -22,25 +23,22 @@ public class Path extends GameObject{
         e.getGraphics().drawLine(_vertex.get(_vertex.size()-1).x, _vertex.get(_vertex.size()-1).y, _vertex.get(0).x, _vertex.get(0).y);
     }
 
+    //El path no se actualiza.
     public void update (double deltaTime){
 
     }
 
+    //Añade un vertice al path
     public void addVertex(float x, float y){
         _vertex.add(new Point(x, y));
     }
+
+    //Añade una dirección normal al path
     public void addDirection(float x, float y){
         _directions.add(new Point(x, y));
     }
-    public void addNullDirection(){_directions.add(null);}
 
-    public void automatizeDirections(){
-        for (int i = 0; i < segments.size(); i++){
-            Segment aux = segments.get(i);
-            _directions.add(Utils.getNormal(aux, false));
-        }
-    }
-
+    //Crea los segmentos del path según los vértices que se han inicializado en la lectura del Json
     public void createSegments()
     {
         for (int i = 0; i < _vertex.size() - 1; i++) {

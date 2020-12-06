@@ -13,6 +13,7 @@ public class UI extends GameObject{
 
     }
 
+    //Dibujado de cada uno de los cuadrados y cruces dependiendo del número de vidas actual de la partida
     public void render(Engine e){
         e.getGraphics().setColor(0xFF1E90FF);
         for (int i = 0; i < lives; i++) {

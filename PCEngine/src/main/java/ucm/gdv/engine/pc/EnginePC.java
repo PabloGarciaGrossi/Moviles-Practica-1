@@ -50,9 +50,6 @@ public class EnginePC implements ucm.gdv.engine.Engine {
                 g.render(logic);
                 logic.update(deltaTime);
                 logic.handleInput();
-                working = logic.isWorking();
-                if(working == false)
-                    System.out.println("hemos finiquitao");
             }
         }
     }
