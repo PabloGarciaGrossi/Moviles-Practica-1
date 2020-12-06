@@ -23,7 +23,7 @@ public class Utils {
 
         Point corte = new Point(x, y);
 
-        if(areEqual(corte, a, 0.005f) || areEqual(corte, b, 0.005f) || areEqual(corte, c, 0.005f) || areEqual(corte, d, 0.005f)) {
+        if(areEqual(corte, a) || areEqual(corte, b) || areEqual(corte, c) || areEqual(corte, d)) {
             return null;
         }
         if(insideSegment(corte, a, b) && insideSegment( corte, c, d)){
@@ -92,7 +92,7 @@ public class Utils {
     }
 
     //Comprueba que dos puntos sean iguales
-    public static boolean areEqual(Point p1, Point p2, float er){
+    public static boolean areEqual(Point p1, Point p2){
         boolean b1 = p1.x == p2.x;
         boolean b2 = p1.y == p2.y;
 

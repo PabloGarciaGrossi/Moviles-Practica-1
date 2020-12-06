@@ -118,6 +118,13 @@ public class Player extends GameObject {
 
     public Segment get_actualSegment() {return  _actualSegment;}
 
+    public Point get_dirSegment() {
+        if(dirNum > 0)
+            return Utils.normalize(_actualSegment);
+        else
+            return  Utils.normalize(new Segment(_actualSegment.p1, _actualSegment.p2));
+    }
+
     public float getDistance(){return  distance;}
 
     /*Método que actualiza la dirección y segmento a seguir del jugador tras finalizar un salto.
@@ -128,7 +135,9 @@ public class Player extends GameObject {
         _path = pa;
         jumping = false;
         _counter = _path.segments.indexOf(s);
-            dirNum = -dirNum;
+        dirNum = -dirNum;
+
+        System.out.println(dirNum);
         if(dirNum < 1) {
             _dirSegment = Utils.normalize(new Segment(_actualSegment.p1, _actualSegment.p2));
             distToPoint = Utils.sqrDistancePointPoint(p, _actualSegment.p1);

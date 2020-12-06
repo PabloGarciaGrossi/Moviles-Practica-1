@@ -113,11 +113,13 @@ public class OffTheLineLogic implements Logic{
                     Point corte = pathCollision(col, _level._paths.get(i).getSegments().get(j));
                     if (corte != null && _level._player.getDistance() > 5f) {
                         Segment s = _level._paths.get(i).getSegments().get(j);
-                        if (s != _level._player.get_actualSegment()) {
-                            Path p = _level._paths.get(i);
-                            _level._player.setNewDirSegment(s, p);
-                            _level._player.setPos(corte);
-                            found = true;
+                        Point dirS = Utils.normalize(s);
+                        Point dirP = _level._player.get_dirSegment();
+                        if (s != _level._player.get_actualSegment() && !Utils.areEqual(dirP, dirS)) {
+                                Path p = _level._paths.get(i);
+                                _level._player.setNewDirSegment(s, p);
+                                _level._player.setPos(corte);
+                                found = true;
                         }
                     }
                     j++;
@@ -414,7 +416,7 @@ public class OffTheLineLogic implements Logic{
             actLVL = 0;
             _level.clearLevel();
             hardMode = true;
-            loadLevel(0);
+            loadLevel(actLVL);
             _level._info = new UI(50, 170, 10, hardMode, lives);
             pila.push(_level);
         }
