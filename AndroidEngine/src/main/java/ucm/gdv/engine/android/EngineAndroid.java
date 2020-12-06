@@ -23,34 +23,36 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
         return _input;
     };
 
+    //abre un InputStream del fichero usando el AssetsManager
     public InputStream openInputStream(String filename){
         InputStream is = null;
         try{
             is = _manager.open(filename);
         }
         catch (Exception e) {
-            System.err.println("Error cargando la fuente: " + e);
+            System.err.println("Error cargando el archivo: " + e);
             return null;
         }
         return is;
     };
 
+    //Inicializa los gráficos y el input
     public void init(){
         _g = new GraphicsAndroid(_surfaceview, _manager, _surfaceview.getHolder());
         _input = new InputAndroid(_surfaceview);
     };
+
+    //Método que se llama en el onResume de la aplicación
+    //crea la thread y la inicia
     public void on_resume(){
         if (!_running) {
-            // Solo hacemos algo si no nos estábamos ejecutando ya
-            // (programación defensiva, nunca se sabe quién va a
-            // usarnos...)
             _running = true;
-            // Lanzamos la ejecución de nuestro método run()
-            // en una hebra nueva.
             _renderThread = new Thread(this);
             _renderThread.start();
         }
     }
+    //Método que se llama en el onPause de la aplicación
+    //si está la hebra activa se espera a que termine
     public void on_pause(){
         if (_running) {
             _running = false;
@@ -60,11 +62,11 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
                     _renderThread = null;
                     break;
                 } catch (InterruptedException ie) {
-                    // Esto no debería ocurrir nunca...
                 }
-            } // while(true)
+            }
         }
     }
+    //Bucle principal que realizará la hebra
     public void run(){
         if (_renderThread != Thread.currentThread()) {
             throw new RuntimeException("run() should not be called directly");
@@ -73,12 +75,11 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
         // un tamaño mayor que 0. Si la hebra se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
         while(_running && getGraphics().getWidth() == 0)
-            // Espera activa. Sería más elegante al menos dormir un poco.
             ;
         long lastFrameTime = System.nanoTime();
         // Bucle principal.
         boolean gameRunning=true;
-        while(_running && gameRunning) {
+        while(_running && gameRunning) {//mientras corra la hebra y el juego no haya terminado
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
@@ -88,7 +89,7 @@ public class EngineAndroid implements ucm.gdv.engine.Engine, Runnable{
             _logic.handleInput();
         }
     };
-
+    //asigna la lógica al motor
     public void setLogic(Logic lo){
         _logic=lo;
     };

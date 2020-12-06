@@ -374,6 +374,7 @@ public class OffTheLineLogic implements Logic{
             {
                 o.handleInput(e);
             }
+            e.getInput().clearEvents();
         }
         //Devuelve una única lista con todos los objetos
         public List<GameObject> getGameobjects(){
@@ -450,6 +451,7 @@ public class OffTheLineLogic implements Logic{
         public void handleInput(Engine e){
             easyModeButton.handleInput(e);
             hardModeButton.handleInput(e);
+            e.getInput().clearEvents();
         }
     }
 

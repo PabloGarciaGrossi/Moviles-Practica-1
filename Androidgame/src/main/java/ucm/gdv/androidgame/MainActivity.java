@@ -19,18 +19,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _surface = new SurfaceView(this);
-        _engine = new EngineAndroid(_surface, getAssets());
-        _engine.init();
+        _surface = new SurfaceView(this);//creación del surface
+        _engine = new EngineAndroid(_surface, getAssets());//creación del motor
+        _engine.init();//inicialización
 
-        if(savedInstanceState==null) {
-            _logic = new OffTheLineLogic(_engine);
-        }
-        else {
-            _logic = new OffTheLineLogic(_engine);
-        }
-        _engine.setLogic(_logic);
-        setContentView(_engine.getSurfaceView());
+        _logic = new OffTheLineLogic(_engine);//creación de la lógica
+
+        _engine.setLogic(_logic);//asignación de la lógica al motor
+        setContentView(_engine.getSurfaceView());//asignar el content view al surface view del motor
     }
     protected void onResume(){
         super.onResume();
@@ -39,9 +35,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         _engine.on_pause();
-    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }

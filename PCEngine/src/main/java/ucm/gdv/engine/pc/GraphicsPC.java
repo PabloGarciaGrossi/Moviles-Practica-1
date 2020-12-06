@@ -75,10 +75,6 @@ public class GraphicsPC implements ucm.gdv.engine.Graphics {
         return _strategy;
     }
 
-    public void onDraw(float x1, float y1, float x2, float y2){
-
-    }
-
     //Lectura y carga de una nueva fuente a utilizar
     public Font newFont(String filename, int size, Boolean isBold){
         FontPC baseFont =  new FontPC();

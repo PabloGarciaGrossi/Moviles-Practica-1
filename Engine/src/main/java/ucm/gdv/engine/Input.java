@@ -13,5 +13,6 @@ public interface Input{
     }
 
     List<TouchEvent> getTouchEvents();
+    void clearEvents();
     public enum type {PULSAR, SOLTAR, DESPLAZAR};
 }

@@ -21,7 +21,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
     AssetManager _manager;
     Canvas canvas_;
     SurfaceHolder _holder;
-
+    //crea el graphics pasando el surface view, holder y assets manager
     public GraphicsAndroid(SurfaceView surfaceView, AssetManager manager, SurfaceHolder holder){
         surfaceView_ = surfaceView;
         _manager = manager;
@@ -29,10 +29,7 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         _paint = new Paint();
     }
 
-    public void onDraw(float x1, float y1, float x2, float y2){
-
-    };
-
+    //Carga una fuente
     public Font newFont(String filename, int size, Boolean isBold){
         _font = new FontAndroid();
 
@@ -42,18 +39,19 @@ public class GraphicsAndroid implements ucm.gdv.engine.Graphics {
         _paint.setFakeBoldText(isBold);
         return _font;
     };
-
+    //parte del renderizado que se ejecuta en el bucle principal
     public void render(Logic lo){
-        while(!_holder.getSurface().isValid())
+        while(!_holder.getSurface().isValid())//espera a tener un surface válido
             ;
         canvas_ = _holder.lockCanvas();
         clear(0xFF000000);
         save();
+        //transformaciones para encajar las coordenadas de lógica
         translate(getWidth()/2, getHeight()/2);
         scale(calculateScale());
         rotate(180);
         lo.render();
-        _holder.unlockCanvasAndPost(canvas_);
+        _holder.unlockCanvasAndPost(canvas_);//presentar el canvas
     }
 
     public void clear (int color){

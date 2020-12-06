@@ -25,7 +25,7 @@ public class EnginePC implements ucm.gdv.engine.Engine {
             is = new FileInputStream("Assets/" + filename);
         }
         catch (Exception e) {
-            System.err.println("Error cargando la fuente: " + e);
+            System.err.println("Error cargando el archivo: " + e);
             return null;
         }
         return is;

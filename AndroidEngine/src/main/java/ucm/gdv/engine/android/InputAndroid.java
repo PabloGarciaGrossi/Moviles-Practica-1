@@ -15,6 +15,7 @@ public class InputAndroid implements ucm.gdv.engine.Input{
     public InputAndroid(SurfaceView view){
         _view=view;
         events= new ArrayList<TouchEvent>();
+        //Listener de input
         _view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -22,10 +23,7 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e= new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.PULSAR;
-                    float x = event.getX();
-                    float y = event.getY();
-                    float w=_view.getWidth();
-                    float h=_view.getHeight();
+                    //transformaciones de coordenadas de pantalla a coordenadas lógicas
                     e.posx = (int)((event.getX() - _view.getWidth()/2) * 1/calculateScale());
                     e.posy = (int)((event.getY() - _view.getHeight()/2) * 1/calculateScale());
                     events.add(e);
@@ -35,8 +33,9 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e= new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.SOLTAR;
-                    e.posx = (int)(event.getX() * calculateScale() + _view.getWidth()/2);
-                    e.posy = (int)(event.getY() * calculateScale() + _view.getHeight()/2);
+                    //transformaciones de coordenadas de pantalla a coordenadas lógicas
+                    e.posx = (int)((event.getX() - _view.getWidth()/2) * 1/calculateScale());
+                    e.posy = (int)((event.getY() - _view.getHeight()/2) * 1/calculateScale());
                     events.add(e);
                     return true;
                 }
@@ -44,8 +43,9 @@ public class InputAndroid implements ucm.gdv.engine.Input{
                     TouchEvent e = new TouchEvent();
                     e.id = event.getDeviceId();
                     e.typeEvent = type.DESPLAZAR;
-                    e.posx = (int)(event.getX() * calculateScale() + _view.getWidth()/2);
-                    e.posy = (int)(event.getY() * calculateScale() + _view.getHeight()/2);
+                    //transformaciones de coordenadas de pantalla a coordenadas lógicas
+                    e.posx = (int)((event.getX() - _view.getWidth()/2) * 1/calculateScale());
+                    e.posy = (int)((event.getY() - _view.getHeight()/2) * 1/calculateScale());
                     events.add(e);
                     return true;
                 }
@@ -53,10 +53,15 @@ public class InputAndroid implements ucm.gdv.engine.Input{
             }
         });
     }
+    //devuelve la lista de eventos
     public List<TouchEvent> getTouchEvents(){
         List<TouchEvent> ret = new ArrayList<TouchEvent>(events);
-        events.clear();
         return ret;
+    }
+
+    //limpiar la lista de eventos
+    public void clearEvents(){
+        events.clear();
     }
 
     public float calculateScale(){

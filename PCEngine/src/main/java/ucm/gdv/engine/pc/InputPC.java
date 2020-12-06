@@ -29,11 +29,8 @@ public class InputPC implements ucm.gdv.engine.Input {
             int w=_window.getWidth();
             int h=_window.getHeight();
 
-            x = (int)(x*scale);
-            y = (int)(y*scale);
-
-            t.posx = x - w/2;
-            t.posy = y - h/2;
+            t.posx = (int)((x - w/2) * 1/scale);
+            t.posy = (int)((y - h/2) * 1/scale);
 
             events.add(t);
         }
@@ -67,11 +64,14 @@ public class InputPC implements ucm.gdv.engine.Input {
         events = new ArrayList<TouchEvent>();
     }
 
-    //Devuelve una copia de los eventos almacenados y limpia la lista anterior
+    //Devuelve una copia de los eventos almacenados
     public List<TouchEvent> getTouchEvents(){
         List<TouchEvent> ret = new ArrayList<TouchEvent>(events);
-        events.clear();
         return ret;
+    }
+    //limpiar la lista de eventos
+    public void clearEvents(){
+        events.clear();
     }
 
     public MouseListener getMl(){
